@@ -1,8 +1,15 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Produto } from "@/types/produto";
 import { formatarPreco, linkPedidoWhatsapp } from "@/lib/whatsapp";
 import { theme, media } from "@/styles/theme";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Card = styled.div`
   display: flex;
@@ -106,8 +113,39 @@ const BotaoPedir = styled.a<{ $disponivel: boolean }>`
 `;
 
 export function ProdutoCard({ produto, whatsapp }: { produto: Produto; whatsapp: string }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 90%",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <Card>
+    <Card ref={cardRef}>
       <ImageWrapper>
         <Image
           src={produto.imagemUrl}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import StyledComponentsRegistry from "@/lib/registry";
 import { GlobalStyle } from "@/styles/GlobalStyle";
+import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <StyledComponentsRegistry>
           <GlobalStyle />
-          {children}
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
