@@ -82,6 +82,13 @@ Regras:
 - PR pequeno > PR grande. Uma feature = um PR.
 - Squash merge ao integrar `feature/*` em `develop` (mantém `develop` com
   histórico linear e legível).
+- `main` só recebe merge de `release/*` ou `hotfix/*`, nunca de `feature/*`
+  diretamente. Essa regra é de processo, não técnica — o GitHub (plano
+  gratuito) não suporta restringir merge por branch de origem via proteção
+  de branch, só via revisão manual antes de aprovar o PR.
+
+`main` e `develop` estão protegidas no GitHub (PR obrigatório,
+`enforce_admins` ativo, sem push direto — nem admin escapa).
 
 ### Conventional Commits
 
