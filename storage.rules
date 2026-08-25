@@ -1,0 +1,13 @@
+rules_version = '2';
+
+// Fotos dos produtos: leitura pública, upload só autenticado.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /produtos/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 5 * 1024 * 1024 // máx 5MB por foto
+                   && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

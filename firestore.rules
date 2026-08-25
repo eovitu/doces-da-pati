@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Regras de segurança do Firestore.
+// - Qualquer pessoa pode LER os produtos (é uma vitrine pública).
+// - Só um usuário autenticado (você, logada) pode CRIAR/ALTERAR/APAGAR.
+//
+// Pra ativar a área administrativa: crie um usuário no Firebase
+// Authentication (Email/Senha) pra sua tia, e ela loga no painel com ele.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /produtos/{produtoId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /loja/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

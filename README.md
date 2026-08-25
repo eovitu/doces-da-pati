@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vitrine de doces
 
-## Getting Started
+Site simples pra mostrar os produtos da loja e receber pedidos pelo WhatsApp.
+Feito em Next.js, hospedado grátis na Vercel, com Firebase como backend
+(opcional no começo — o site já funciona com dados de exemplo).
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + TypeScript + Tailwind CSS
+- **Firebase**: Firestore (produtos) + Storage (fotos) — plano gratuito (Spark)
+- **Vercel**: hospedagem e deploy automático a cada push
+- Pedido = link `wa.me` com mensagem pronta, sem checkout nem gateway de pagamento
+
+## Rodando localmente
 
 ```bash
+npm install
+cp .env.example .env.local   # já vem pronto pra rodar sem Firebase
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre em `http://localhost:3000`. Com `NEXT_PUBLIC_USA_FIREBASE=false` (padrão),
+o site usa os produtos de exemplo em `src/data/produtos-mock.ts` — dá pra
+mexer no layout sem precisar configurar nada externo ainda.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estrutura
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/            páginas (App Router)
+  components/     componentes de UI (ProdutoCard, etc.)
+  data/           dados de exemplo (produtos-mock.ts)
+  lib/            firebase.ts, produtos.ts (busca de dados), whatsapp.ts
+  types/          tipos TypeScript (Produto, LojaInfo)
+firestore.rules    regras de segurança do Firestore
+storage.rules       regras de segurança do Storage (fotos)
+```
 
-## Learn More
+## Colocando o Firebase pra valer
 
-To learn more about Next.js, take a look at the following resources:
+1. Criar o projeto em https://console.firebase.google.com (plano Spark, gratuito).
+2. Ativar **Firestore Database** (modo produção) e **Storage**.
+3. Em *Configurações do projeto > Geral > Seus apps*, criar um app Web e copiar
+   as chaves para `.env.local` (usar `.env.example` como base).
+4. Trocar `NEXT_PUBLIC_USA_FIREBASE` para `true`.
+5. Publicar as regras (`firestore.rules` e `storage.rules`) pelo Console ou via
+   Firebase CLI (`firebase deploy --only firestore:rules,storage:rules`).
+6. Criar a coleção `produtos` no Firestore com os campos do tipo `Produto`
+   (ver `src/types/produto.ts`).
+7. (Opcional, área administrativa) Ativar **Authentication > Email/senha** e
+   criar um usuário pra sua tia logar e editar os produtos.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy na Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Subir este repositório pro GitHub (ver seção abaixo).
+2. Em https://vercel.com, "Add New Project" → importar o repositório.
+3. Adicionar as mesmas variáveis de `.env.local` em
+   *Project Settings > Environment Variables*.
+4. Deploy. A cada push na branch principal, a Vercel publica automaticamente.
+5. (Opcional) Domínio próprio em *Project Settings > Domains* — tem custo
+   anual de registro, mas o *.vercel.app* já vem incluso de graça.
 
-## Deploy on Vercel
+## Subindo pro GitHub
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+git remote add origin https://github.com/SEU_USUARIO/doce-vitrine.git
+git branch -M main
+git push -u origin main
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Custos
+
+Tudo isso roda no plano gratuito: Vercel Hobby, Firebase Spark, `*.vercel.app`.
+O único custo eventual é um domínio próprio (`www.suamarca.com.br`), se a
+loja quiser um endereço personalizado — e isso é opcional.
