@@ -7,6 +7,7 @@ export const produtosSeed: Produto[] = [
   {
     slug: "espetinho-de-morango",
     nome: "Espetinho de morango",
+    descricao: "Morango com casquinha de chocolate.",
     preco: 1500,
     imagens: [{ url: "/produtos/espetinho-de-morango.webp" }],
     ativo: true,
@@ -16,6 +17,7 @@ export const produtosSeed: Produto[] = [
   {
     slug: "espetinho-de-bombom-de-morango",
     nome: "Espetinho de bombom de morango",
+    descricao: "Morango recheado com brigadeiro de ninho e cobertura de chocolate.",
     preco: 1800,
     imagens: [{ url: "/produtos/espetinho-de-bombom-de-morango.webp" }],
     ativo: true,
@@ -25,6 +27,7 @@ export const produtosSeed: Produto[] = [
   {
     slug: "espetinho-de-uva",
     nome: "Espetinho de uva",
+    descricao: "Uva verde sem semente com cobertura de chocolate.",
     preco: 1200,
     imagens: [{ url: "/produtos/espetinho-de-uva.webp" }],
     ativo: true,
@@ -39,10 +42,13 @@ export const produtosSeed: Produto[] = [
     ativo: true,
     ordem: 3,
     controlaEstoque: false,
+    sabores: ["Doce de leite", "Ninho", "Ninho com Nutella", "Brigadeiro", "Prestígio"],
   },
   {
     slug: "bombom-de-morango-no-pote",
     nome: "Bombom de morango no pote",
+    descricao:
+      "Morangos e uma camada de recheio de brigadeiro de ninho com uma camada de ganache de chocolate ao leite.",
     preco: 1800,
     imagens: [{ url: "/produtos/bombom-de-morango-no-pote.webp" }],
     ativo: true,
@@ -52,6 +58,8 @@ export const produtosSeed: Produto[] = [
   {
     slug: "bombom-de-uva-no-pote",
     nome: "Bombom de uva no pote",
+    descricao:
+      "Uvas verdes sem semente e uma camada de recheio de brigadeiro de ninho com uma camada de ganache de chocolate ao leite.",
     preco: 1800,
     imagens: [{ url: "/produtos/bombom-de-uva-no-pote.webp" }],
     ativo: true,
@@ -61,6 +69,7 @@ export const produtosSeed: Produto[] = [
   {
     slug: "lanche-natural",
     nome: "Lanche natural",
+    descricao: "Pão de forma integral recheado com patê de frango, cenoura, tomate e alface.",
     preco: 1200,
     imagens: [{ url: "/produtos/lanche-natural.webp" }],
     ativo: true,
@@ -75,6 +84,7 @@ export const produtosSeed: Produto[] = [
     ativo: true,
     ordem: 7,
     controlaEstoque: false,
+    sabores: ["Goiaba", "Manga", "Maracujá", "Acerola", "Morango"],
   },
 ];
 

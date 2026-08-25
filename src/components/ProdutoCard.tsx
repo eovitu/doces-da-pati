@@ -84,6 +84,11 @@ const Descricao = styled.p`
   overflow: hidden;
 `;
 
+const Sabores = styled.p`
+  font-size: 0.8125rem;
+  color: ${theme.colors.textMuted};
+`;
+
 const PrecoRow = styled.div`
   margin-top: auto;
   display: flex;
@@ -170,6 +175,9 @@ export function ProdutoCard({ produto, whatsapp }: { produto: Produto; whatsapp:
       <Content>
         <Nome>{produto.nome}</Nome>
         {produto.descricao && <Descricao>{produto.descricao}</Descricao>}
+        {produto.sabores && produto.sabores.length > 0 && (
+          <Sabores>Sabores: {produto.sabores.join(", ")}</Sabores>
+        )}
 
         <PrecoRow>
           <Preco>{produto.preco === 0 ? "Consulte o preço" : formatarPreco(produto.preco)}</Preco>

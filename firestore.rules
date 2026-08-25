@@ -8,8 +8,8 @@ rules_version = '2';
 // - pedidos: qualquer cliente (mesmo anônimo) pode CRIAR um pedido bem
 //   formado; ler, alterar ou apagar exige ser admin. Nada além de criar é
 //   liberado ao cliente.
-// - admins: nunca acessível pelo cliente, nem para leitura. É gerenciado
-//   manualmente pelo console/CLI ao criar um usuário novo.
+// - admins: leitura só do próprio documento (um admin confirma que é admin),
+//   escrita nunca pelo cliente — só pelo console/CLI ao criar um usuário novo.
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
@@ -38,14 +38,16 @@ service cloud.firestore {
     }
 
     match /admins/{uid} {
-      allow read, write: if false;
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
     }
 
     match /pedidos/{pedidoId} {
       allow read, update, delete: if isAdmin();
       allow create: if isAdmin() || (
         request.resource.data.keys().hasOnly([
-          "itens", "cliente", "entrega", "formaPagamento", "observacoes", "total", "criadoEm", "status"
+          "itens", "subtotal", "taxaEntrega", "total", "cliente", "entrega",
+          "formaPagamento", "observacoes", "status", "criadoEm"
         ]) &&
         request.resource.data.itens is list &&
         request.resource.data.itens.size() > 0 &&
@@ -56,6 +58,10 @@ service cloud.firestore {
         request.resource.data.cliente.telefone.size() > 0 &&
         request.resource.data.entrega.tipo in ["retirada", "entrega"] &&
         request.resource.data.formaPagamento in ["pix", "dinheiro", "cartao"] &&
+        request.resource.data.subtotal is number &&
+        request.resource.data.subtotal >= 0 &&
+        request.resource.data.taxaEntrega is number &&
+        request.resource.data.taxaEntrega >= 0 &&
         request.resource.data.total is number &&
         request.resource.data.total >= 0 &&
         request.resource.data.status == "novo"
