@@ -28,6 +28,18 @@ const ImageWrapper = styled.div`
   background: ${theme.colors.border};
 `;
 
+const ImagemPlaceholder = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: ${theme.spacing.sm};
+  text-align: center;
+  color: ${theme.colors.textMuted};
+  font-size: 0.875rem;
+`;
+
 const IndisponivelBadge = styled.span`
   position: absolute;
   top: ${theme.spacing.xs};
@@ -51,14 +63,6 @@ const Content = styled.div`
     padding: ${theme.spacing.lg};
     gap: ${theme.spacing.sm};
   }
-`;
-
-const Categoria = styled.p`
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: ${theme.colors.accent};
 `;
 
 const Nome = styled.h3`
@@ -114,6 +118,8 @@ const BotaoPedir = styled.a<{ $disponivel: boolean }>`
 
 export function ProdutoCard({ produto, whatsapp }: { produto: Produto; whatsapp: string }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const imagem = produto.imagens[0];
+  const disponivel = !produto.controlaEstoque || (produto.estoque ?? 0) > 0;
 
   useEffect(() => {
     const el = cardRef.current;
@@ -147,34 +153,34 @@ export function ProdutoCard({ produto, whatsapp }: { produto: Produto; whatsapp:
   return (
     <Card ref={cardRef}>
       <ImageWrapper>
-        <Image
-          src={produto.imagemUrl}
-          alt={produto.nome}
-          fill
-          style={{ objectFit: "cover" }}
-          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
-        />
-        {!produto.disponivel && <IndisponivelBadge>Indisponível</IndisponivelBadge>}
+        {imagem ? (
+          <Image
+            src={imagem.url}
+            alt={imagem.alt ?? produto.nome}
+            fill
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
+          />
+        ) : (
+          <ImagemPlaceholder>{produto.nome}</ImagemPlaceholder>
+        )}
+        {!disponivel && <IndisponivelBadge>Indisponível</IndisponivelBadge>}
       </ImageWrapper>
 
       <Content>
-        <Categoria>{produto.categoria}</Categoria>
         <Nome>{produto.nome}</Nome>
-        <Descricao>{produto.descricao}</Descricao>
+        {produto.descricao && <Descricao>{produto.descricao}</Descricao>}
 
         <PrecoRow>
-          <Preco>
-            {produto.precoVariavel ? "a partir de " : ""}
-            {formatarPreco(produto.preco)}
-          </Preco>
+          <Preco>{produto.preco === 0 ? "Consulte o preço" : formatarPreco(produto.preco)}</Preco>
         </PrecoRow>
 
         <BotaoPedir
           href={linkPedidoWhatsapp(whatsapp, produto)}
           target="_blank"
           rel="noopener noreferrer"
-          aria-disabled={!produto.disponivel}
-          $disponivel={produto.disponivel}
+          aria-disabled={!disponivel}
+          $disponivel={disponivel}
         >
           Pedir pelo WhatsApp
         </BotaoPedir>
