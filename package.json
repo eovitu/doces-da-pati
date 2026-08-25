@@ -1,12 +1,13 @@
 {
-  "name": "doce-vitrine",
+  "name": "doces-da-pati",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx scripts/seed-firestore.mts"
   },
   "dependencies": {
     "firebase": "^12.18.0",
@@ -24,6 +25,8 @@
     "babel-plugin-styled-components": "^2.3.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
+    "firebase-admin": "^13.0.0",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }

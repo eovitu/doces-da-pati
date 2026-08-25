@@ -31,7 +31,7 @@ repetir — para o dia a dia de desenvolvimento, ver o [`README.md`](../README.m
 ## Subindo pro GitHub
 
 ```bash
-git remote add origin https://github.com/SEU_USUARIO/doce-vitrine.git
+git remote add origin https://github.com/eovitu/doces-da-pati.git
 git branch -M main
 git push -u origin main
 ```
