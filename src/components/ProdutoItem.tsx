@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { Produto, produtoDisponivel } from "@/types/produto";
 import { formatarPreco, linkPedidoWhatsapp } from "@/lib/whatsapp";
+import { visualizarProduto } from "@/lib/analytics";
 import { AdicionarAoCarrinho } from "./AdicionarAoCarrinho";
 import { theme, media } from "@/styles/theme";
 
@@ -129,9 +131,28 @@ export function ProdutoItem({
 }) {
   const imagem = produto.imagens[0];
   const disponivel = produtoDisponivel(produto);
+  const itemRef = useRef<HTMLElement>(null);
+
+  // Impressão do produto pra GA4 — desacoplado do Reveal/GSAP de propósito,
+  // pra não misturar telemetria com a animação de entrada.
+  useEffect(() => {
+    const el = itemRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) {
+          visualizarProduto(produto);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [produto]);
 
   return (
-    <Item $disponivel={disponivel}>
+    <Item ref={itemRef} $disponivel={disponivel}>
       <Figura>
         {imagem ? (
           <Image
