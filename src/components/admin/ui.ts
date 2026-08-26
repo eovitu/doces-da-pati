@@ -118,6 +118,61 @@ export const BotaoSecundario = styled(Botao)`
   }
 `;
 
+export const Textarea = styled.textarea`
+  font-family: ${theme.typography.body};
+  font-size: 1rem;
+  color: ${theme.colors.ink};
+  background: ${theme.colors.background};
+  border: 1px solid ${theme.colors.line};
+  border-radius: ${theme.radii.sm};
+  padding: ${theme.spacing.sm};
+  min-height: 96px;
+  resize: vertical;
+
+  &:focus-visible {
+    outline: 2px solid ${theme.colors.accent};
+    outline-offset: 2px;
+    border-color: ${theme.colors.accent};
+  }
+`;
+
+export const LinhaCheckbox = styled.label`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing.xs};
+  font-size: ${theme.fontSize.small};
+  color: ${theme.colors.ink};
+
+  input {
+    width: 20px;
+    height: 20px;
+    accent-color: ${theme.colors.accent};
+  }
+`;
+
+export const BotaoIcone = styled.button`
+  font-family: ${theme.typography.body};
+  font-size: ${theme.fontSize.small};
+  min-height: 36px;
+  min-width: 36px;
+  padding: 0 ${theme.spacing.xs};
+  color: ${theme.colors.inkSoft};
+  background: ${theme.colors.background};
+  border: 1px solid ${theme.colors.line};
+  border-radius: ${theme.radii.sm};
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: ${theme.colors.accent};
+    border-color: ${theme.colors.accent};
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+`;
+
 export const Mensagem = styled.p`
   margin-bottom: ${theme.spacing.md};
   padding: ${theme.spacing.sm};
