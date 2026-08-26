@@ -1,6 +1,7 @@
 export interface ProdutoImagem {
   url: string; // caminho relativo (/produtos/<slug>.webp) ou URL absoluta
   alt?: string;
+  path?: string; // caminho no Storage, só quando veio de upload pelo admin
 }
 
 export interface Produto {
