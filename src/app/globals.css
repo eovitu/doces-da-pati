@@ -16,6 +16,7 @@ body {
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -26,4 +27,8 @@ a {
 img {
   display: block;
   max-width: 100%;
+}
+
+ul {
+  list-style: none;
 }
