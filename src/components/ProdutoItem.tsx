@@ -4,6 +4,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import { Produto } from "@/types/produto";
 import { formatarPreco, linkPedidoWhatsapp } from "@/lib/whatsapp";
+import { AdicionarAoCarrinho } from "./AdicionarAoCarrinho";
 import { theme, media } from "@/styles/theme";
 
 // Sem cartão: nem borda, nem sombra, nem caixa branca. As fotos foram feitas
@@ -92,12 +93,6 @@ const Descricao = styled.p`
   max-width: 42ch;
 `;
 
-const Sabores = styled.p`
-  font-size: ${theme.fontSize.small};
-  color: ${theme.colors.inkMuted};
-  max-width: 42ch;
-`;
-
 const Rodape = styled.div`
   margin-top: ${theme.spacing.sm};
   display: flex;
@@ -112,27 +107,6 @@ const Preco = styled.p`
   color: ${theme.colors.ink};
 `;
 
-const Pedir = styled.a`
-  font-size: ${theme.fontSize.small};
-  font-weight: 600;
-  color: ${theme.colors.accent};
-  border-bottom: 1px solid ${theme.colors.accent};
-  padding-bottom: 1px;
-  transition: color 0.2s ease, border-color 0.2s ease;
-
-  &:hover {
-    color: ${theme.colors.accentHover};
-    border-color: ${theme.colors.accentHover};
-  }
-`;
-
-const Indisponivel = styled.p`
-  font-size: ${theme.fontSize.small};
-  color: ${theme.colors.inkMuted};
-`;
-
-// Oito links com o mesmo texto visível na página — o nome do produto precisa
-// estar no rótulo acessível para leitor de tela distinguir um do outro.
 export function ProdutoItem({
   produto,
   whatsapp,
@@ -168,27 +142,17 @@ export function ProdutoItem({
       <Texto>
         <Nome>{produto.nome}</Nome>
         {produto.descricao && <Descricao>{produto.descricao}</Descricao>}
-        {produto.sabores && produto.sabores.length > 0 && (
-          <Sabores>Sabores: {produto.sabores.join(", ")}</Sabores>
-        )}
-
         <Rodape>
           <Preco>
             {produto.preco === 0 ? "Consulte o preço" : formatarPreco(produto.preco)}
           </Preco>
-          {disponivel ? (
-            <Pedir
-              href={linkPedidoWhatsapp(whatsapp, produto)}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Pedir ${produto.nome} pelo WhatsApp`}
-            >
-              Pedir pelo WhatsApp
-            </Pedir>
-          ) : (
-            <Indisponivel>Sem estoque no momento</Indisponivel>
-          )}
         </Rodape>
+
+        <AdicionarAoCarrinho
+          produto={produto}
+          disponivel={disponivel}
+          linkConsulta={linkPedidoWhatsapp(whatsapp, produto)}
+        />
       </Texto>
     </Item>
   );

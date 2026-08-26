@@ -6,6 +6,9 @@ import { Vitrine } from "@/components/Vitrine";
 import { Encomendas } from "@/components/Encomendas";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkipLink } from "@/components/SkipLink";
+import { CarrinhoProvider } from "@/lib/carrinho";
+import { BarraCarrinho } from "@/components/BarraCarrinho";
+import { CarrinhoSheet } from "@/components/CarrinhoSheet";
 import { linkEncomendaWhatsapp } from "@/lib/whatsapp";
 
 export default async function Home() {
@@ -14,7 +17,7 @@ export default async function Home() {
   const aviso = loja.avisoTemporario;
 
   return (
-    <>
+    <CarrinhoProvider>
       <SkipLink />
       {aviso?.ativo && <AvisoTemporario mensagem={aviso.mensagem} />}
       <SiteHeader loja={loja} />
@@ -23,6 +26,8 @@ export default async function Home() {
         <Encomendas href={linkEncomendaWhatsapp(loja.whatsapp)} />
       </main>
       <SiteFooter loja={loja} bairros={entregaConfigSeed.bairros} />
-    </>
+      <BarraCarrinho />
+      <CarrinhoSheet whatsapp={loja.whatsapp} />
+    </CarrinhoProvider>
   );
 }
