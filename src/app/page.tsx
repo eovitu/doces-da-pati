@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { getProdutos } from "@/lib/produtos";
-import { lojaInfoMock } from "@/data/produtos-mock";
+import { lojaInfoSeed } from "@/data/produtos-seed";
 import { ProdutoCard } from "@/components/ProdutoCard";
 import { linkContatoWhatsapp } from "@/lib/whatsapp";
 import { theme, media } from "@/styles/theme";
@@ -116,16 +116,16 @@ const Footer = styled.footer`
 
 export default async function Home() {
   const produtos = await getProdutos();
-  const loja = lojaInfoMock; // trocar por dados vindos do Firebase quando existir a coleção "loja"
+  const loja = lojaInfoSeed; // trocar por dados vindos do Firebase quando existir o documento "loja/info"
 
   return (
     <Page>
       <Header>
         <HeaderInner>
           <Titulo>{loja.nome}</Titulo>
-          <Descricao>{loja.descricaoCurta}</Descricao>
+          {loja.sobre && <Descricao>{loja.sobre}</Descricao>}
           <InfoLoja>
-            {loja.cidade} · {loja.horarios}
+            {loja.regiao} · {loja.horarioAtendimento}
           </InfoLoja>
           <BotaoWhatsapp
             href={linkContatoWhatsapp(loja.whatsapp)}
@@ -141,7 +141,7 @@ export default async function Home() {
         <SecaoTitulo>Nossos produtos</SecaoTitulo>
         <Grid>
           {produtos.map((produto) => (
-            <ProdutoCard key={produto.id} produto={produto} whatsapp={loja.whatsapp} />
+            <ProdutoCard key={produto.slug} produto={produto} whatsapp={loja.whatsapp} />
           ))}
         </Grid>
       </Main>

@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Doces da [Nome] | Vitrine",
-  description: "Vitrine digital de doces artesanais — pedidos pelo WhatsApp.",
+  title: "Os Doces da Pati | Vitrine",
+  description: "Doces artesanais na zona sul de São Paulo — pedidos pelo WhatsApp.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

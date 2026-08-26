@@ -1,8 +1,9 @@
-# Vitrine de doces
+# Os Doces da Pati
 
-Vitrine digital pra uma pequena doceria: mostra os produtos com fotos e
-preços, e transforma isso em pedido pelo WhatsApp — sem loja física online,
-sem catálogo impresso, sem depender de rede social pra vender.
+Vitrine digital da Os Doces da Pati, uma doceria de bairro na zona sul de
+São Paulo: mostra os produtos com fotos e preços, e transforma isso em
+pedido pelo WhatsApp — sem loja física online, sem catálogo impresso, sem
+depender de rede social pra vender.
 
 ## Decisões técnicas
 
@@ -25,10 +26,10 @@ src/
   app/            páginas (Next.js App Router)
   components/     componentes de UI (ex.: ProdutoCard)
   lib/            firebase.ts (init do SDK), produtos.ts (busca de dados,
-                  alterna mock/Firestore), whatsapp.ts (monta o link de pedido)
-  data/           produtos-mock.ts — dados de exemplo usados enquanto o
-                  Firebase não está ligado
-  types/          tipos TypeScript (Produto, LojaInfo)
+                  alterna seed local/Firestore), whatsapp.ts (monta o link de pedido)
+  data/           produtos-seed.ts — dados reais do catálogo, também usados
+                  pelo script scripts/seed-firestore.mts
+  types/          tipos TypeScript (Produto, Categoria, LojaInfo, EntregaConfig)
 ```
 
 ## Como rodar o projeto hoje
@@ -43,8 +44,8 @@ npm run lint                 # lint
 
 O comportamento é controlado por `NEXT_PUBLIC_USA_FIREBASE` no `.env.local`:
 
-- `false` (padrão) — usa os produtos de exemplo em
-  `src/data/produtos-mock.ts`. Não precisa de nenhuma configuração externa.
+- `false` (padrão) — usa os produtos reais de `src/data/produtos-seed.ts`
+  direto no código. Não precisa de nenhuma configuração externa.
 - `true` — busca os produtos reais na coleção `produtos` do Firestore
   (exige as variáveis `NEXT_PUBLIC_FIREBASE_*` preenchidas em `.env.local`).
 
