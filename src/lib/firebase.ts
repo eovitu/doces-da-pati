@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
@@ -18,7 +18,19 @@ const firebaseConfig = {
 // Evita reinicializar o app em hot-reload / múltiplos imports
 export const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const db = getFirestore(firebaseApp);
+// ignoreUndefinedProperties: o admin monta objetos com campos opcionais
+// (descrição, estoque) que ficam `undefined` quando vazios — sem isso o
+// Firestore rejeita o setDoc inteiro em vez de simplesmente omitir o campo.
+// initializeFirestore só pode rodar uma vez por app — em hot-reload ele
+// estoura "already been called", e nesse caso a instância já configurada
+// é reaproveitada via getFirestore.
+export const db = (() => {
+  try {
+    return initializeFirestore(firebaseApp, { ignoreUndefinedProperties: true });
+  } catch {
+    return getFirestore(firebaseApp);
+  }
+})();
 export const storage = getStorage(firebaseApp);
 
 // Auth só é usado na área administrativa (a vitrine pública não pede login).
