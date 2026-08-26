@@ -91,10 +91,23 @@ interface FormularioProduto {
   sabores: string;
   controlaEstoque: boolean;
   estoque: string;
+  estoquePorSabor: Record<string, string>;
   ativo: boolean;
 }
 
+function listaDeSabores(saboresTexto: string): string[] {
+  return saboresTexto
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 function produtoParaFormulario(produto: Produto): FormularioProduto {
+  const estoquePorSabor: Record<string, string> = {};
+  for (const sabor of produto.sabores ?? []) {
+    const quantidade = produto.estoquePorSabor?.[sabor];
+    if (quantidade !== undefined) estoquePorSabor[sabor] = String(quantidade);
+  }
   return {
     slugOriginal: produto.slug,
     nome: produto.nome,
@@ -104,6 +117,7 @@ function produtoParaFormulario(produto: Produto): FormularioProduto {
     sabores: (produto.sabores ?? []).join(", "),
     controlaEstoque: produto.controlaEstoque,
     estoque: produto.estoque != null ? String(produto.estoque) : "",
+    estoquePorSabor,
     ativo: produto.ativo,
   };
 }
@@ -117,6 +131,7 @@ const FORMULARIO_VAZIO: FormularioProduto = {
   sabores: "",
   controlaEstoque: false,
   estoque: "",
+  estoquePorSabor: {},
   ativo: true,
 };
 
@@ -156,6 +171,19 @@ export function ProdutosAdmin() {
     }
 
     const existente = produtos?.find((p) => p.slug === slug);
+    const sabores = listaDeSabores(formulario.sabores);
+    const temSabores = sabores.length > 0;
+
+    const estoquePorSabor: Record<string, number> = {};
+    if (formulario.controlaEstoque && temSabores) {
+      for (const s of sabores) {
+        const valor = formulario.estoquePorSabor[s];
+        if (valor !== undefined && valor !== "") {
+          estoquePorSabor[s] = Number.parseInt(valor, 10);
+        }
+      }
+    }
+
     const produto: Produto = {
       slug,
       nome: formulario.nome.trim(),
@@ -168,13 +196,12 @@ export function ProdutosAdmin() {
       ordem: existente?.ordem ?? produtos?.length ?? 0,
       controlaEstoque: formulario.controlaEstoque,
       estoque:
-        formulario.controlaEstoque && formulario.estoque !== ""
+        formulario.controlaEstoque && !temSabores && formulario.estoque !== ""
           ? Number.parseInt(formulario.estoque, 10)
           : undefined,
-      sabores: formulario.sabores
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      estoquePorSabor:
+        formulario.controlaEstoque && temSabores ? estoquePorSabor : undefined,
+      sabores,
     };
 
     setSalvando(true);
@@ -230,7 +257,14 @@ export function ProdutosAdmin() {
                 <NomeProduto>{produto.nome}</NomeProduto>
                 <DetalheProduto>
                   {formatarCentavos(produto.preco)}
-                  {produto.controlaEstoque && ` · estoque: ${produto.estoque ?? 0}`}
+                  {produto.controlaEstoque &&
+                    produto.sabores?.length &&
+                    ` · estoque: ${produto.sabores
+                      .map((s) => `${s} (${produto.estoquePorSabor?.[s] ?? "livre"})`)
+                      .join(", ")}`}
+                  {produto.controlaEstoque &&
+                    !produto.sabores?.length &&
+                    ` · estoque: ${produto.estoque ?? 0}`}
                   {!produto.ativo && " · fora da vitrine"}
                 </DetalheProduto>
               </InfoProduto>
@@ -344,7 +378,33 @@ export function ProdutosAdmin() {
             </LinhaCheckbox>
           </Campo>
 
-          {formulario.controlaEstoque && (
+          {formulario.controlaEstoque && listaDeSabores(formulario.sabores).length > 0 && (
+            <Campo>
+              <Rotulo>Quantidade em estoque por sabor</Rotulo>
+              {listaDeSabores(formulario.sabores).map((s) => (
+                <Grade key={s} style={{ alignItems: "center", marginTop: theme.spacing.xxs }}>
+                  <DetalheProduto>{s}</DetalheProduto>
+                  <Input
+                    type="number"
+                    min={0}
+                    placeholder="livre (sem controle)"
+                    value={formulario.estoquePorSabor[s] ?? ""}
+                    onChange={(e) =>
+                      setFormulario({
+                        ...formulario,
+                        estoquePorSabor: {
+                          ...formulario.estoquePorSabor,
+                          [s]: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </Grade>
+              ))}
+            </Campo>
+          )}
+
+          {formulario.controlaEstoque && listaDeSabores(formulario.sabores).length === 0 && (
             <Campo>
               <Rotulo htmlFor="produto-estoque">Quantidade em estoque</Rotulo>
               <Input
