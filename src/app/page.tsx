@@ -1,152 +1,28 @@
-import styled from "styled-components";
 import { getProdutos } from "@/lib/produtos";
-import { lojaInfoSeed } from "@/data/produtos-seed";
-import { ProdutoCard } from "@/components/ProdutoCard";
-import { linkContatoWhatsapp } from "@/lib/whatsapp";
-import { theme, media } from "@/styles/theme";
-
-const Page = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 100vh;
-  background: ${theme.colors.background};
-`;
-
-const Header = styled.header`
-  border-bottom: 1px solid ${theme.colors.border};
-  background: ${theme.colors.surface};
-`;
-
-const HeaderInner = styled.div`
-  margin: 0 auto;
-  max-width: 1440px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${theme.spacing.sm};
-  padding: ${theme.spacing.xl} ${theme.spacing.md};
-  text-align: center;
-
-  ${media.desktop} {
-    padding: ${theme.spacing.xxl} ${theme.spacing.lg};
-  }
-`;
-
-const Titulo = styled.h1`
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: ${theme.colors.textPrimary};
-
-  ${media.desktop} {
-    font-size: 2.25rem;
-  }
-`;
-
-const Descricao = styled.p`
-  max-width: 32rem;
-  color: ${theme.colors.textSecondary};
-`;
-
-const InfoLoja = styled.p`
-  font-size: 0.875rem;
-  color: ${theme.colors.textMuted};
-`;
-
-const BotaoWhatsapp = styled.a`
-  margin-top: ${theme.spacing.xs};
-  border-radius: ${theme.radii.lg};
-  background: ${theme.colors.accent};
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.625rem 1.25rem;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background: ${theme.colors.accentHover};
-  }
-`;
-
-const Main = styled.main`
-  margin: 0 auto;
-  width: 100%;
-  max-width: 1440px;
-  padding: ${theme.spacing.lg} ${theme.spacing.md};
-
-  ${media.desktop} {
-    padding: ${theme.spacing.xl} ${theme.spacing.lg};
-  }
-`;
-
-const SecaoTitulo = styled.h2`
-  margin-bottom: ${theme.spacing.md};
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: ${theme.colors.textPrimary};
-`;
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: ${theme.spacing.md};
-
-  ${media.tablet} {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  ${media.desktop} {
-    grid-template-columns: repeat(4, 1fr);
-    gap: ${theme.spacing.lg};
-  }
-
-  ${media.desktopLarge} {
-    grid-template-columns: repeat(5, 1fr);
-  }
-`;
-
-const Footer = styled.footer`
-  border-top: 1px solid ${theme.colors.border};
-  padding: ${theme.spacing.lg} 0;
-  text-align: center;
-  font-size: 0.875rem;
-  color: ${theme.colors.textMuted};
-`;
+import { entregaConfigSeed, lojaInfoSeed } from "@/data/produtos-seed";
+import { SiteHeader } from "@/components/SiteHeader";
+import { AvisoTemporario } from "@/components/AvisoTemporario";
+import { Vitrine } from "@/components/Vitrine";
+import { Encomendas } from "@/components/Encomendas";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SkipLink } from "@/components/SkipLink";
+import { linkEncomendaWhatsapp } from "@/lib/whatsapp";
 
 export default async function Home() {
   const produtos = await getProdutos();
   const loja = lojaInfoSeed; // trocar por dados vindos do Firebase quando existir o documento "loja/info"
+  const aviso = loja.avisoTemporario;
 
   return (
-    <Page>
-      <Header>
-        <HeaderInner>
-          <Titulo>{loja.nome}</Titulo>
-          {loja.sobre && <Descricao>{loja.sobre}</Descricao>}
-          <InfoLoja>
-            {loja.regiao} · {loja.horarioAtendimento}
-          </InfoLoja>
-          <BotaoWhatsapp
-            href={linkContatoWhatsapp(loja.whatsapp)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Falar no WhatsApp
-          </BotaoWhatsapp>
-        </HeaderInner>
-      </Header>
-
-      <Main>
-        <SecaoTitulo>Nossos produtos</SecaoTitulo>
-        <Grid>
-          {produtos.map((produto) => (
-            <ProdutoCard key={produto.slug} produto={produto} whatsapp={loja.whatsapp} />
-          ))}
-        </Grid>
-      </Main>
-
-      <Footer>{loja.nome} · Pedidos pelo WhatsApp</Footer>
-    </Page>
+    <>
+      <SkipLink />
+      {aviso?.ativo && <AvisoTemporario mensagem={aviso.mensagem} />}
+      <SiteHeader loja={loja} />
+      <main id="conteudo">
+        <Vitrine produtos={produtos} whatsapp={loja.whatsapp} />
+        <Encomendas href={linkEncomendaWhatsapp(loja.whatsapp)} />
+      </main>
+      <SiteFooter loja={loja} bairros={entregaConfigSeed.bairros} />
+    </>
   );
 }

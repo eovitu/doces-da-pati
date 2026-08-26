@@ -26,3 +26,13 @@ export function formatarPreco(precoEmCentavos: number): string {
     currency: "BRL",
   });
 }
+
+/**
+ * Encomendas de festinha (brigadeiro e pão de mel) são sob consulta — não têm
+ * preço, então a mensagem abre a conversa em vez de fechar um pedido.
+ */
+export function linkEncomendaWhatsapp(numero: string): string {
+  const mensagem =
+    "Olá! Vim pelo site e gostaria de fazer uma encomenda para festinha.";
+  return `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+}
