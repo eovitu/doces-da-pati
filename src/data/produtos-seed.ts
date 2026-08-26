@@ -95,9 +95,13 @@ export const lojaInfoSeed: LojaInfo = {
   instagram: "https://www.instagram.com/osdocesdapati",
   regiao: "São Paulo, zona sul",
   retirada: "Parque Regina",
-  horarioAtendimento: "12h às 22h, todos os dias",
+  horarioAtendimento: "12h às 22h, de terça a domingo",
   horarioEntrega: "18h às 22h",
   formasPagamento: ["pix", "cartao"],
+  sobre:
+    "Doces caseiros artesanais feitos por mim com muito amor e qualidade. " +
+    "Escolha seu pedido e finalize comigo pelo WhatsApp com atendimento humanizado " +
+    "para tirar qualquer dúvida.",
 };
 
 // Valores de frete ainda não informados pela Patricia.

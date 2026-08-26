@@ -57,7 +57,7 @@ toda mudança nele precisa estar no git para ser reproduzível e revisável.
 | Instagram | https://www.instagram.com/osdocesdapati |
 | Região | São Paulo, zona sul |
 | Retirada | Parque Regina |
-| Horário de atendimento | 12h às 22h, todos os dias |
+| Horário de atendimento | 12h às 22h, de terça a domingo |
 | Horário de entrega | 18h às 22h |
 | Bairros atendidos | Campo Limpo, Vila Andrade, Parque Araribá, Jardim Inga, Jardim Olinda |
 | Taxa de entrega | Varia por região — **valores ainda pendentes** |
@@ -234,7 +234,7 @@ Workspace `90171496922`, espaço "Vitrine Doceria" (`90177083723`).
 - [ ] Dados reais no lugar dos dados de exemplo
 - [ ] Firestore ativado e populado
 - [x] Redesign da vitrine
-- [ ] Carrinho + geração da mensagem de WhatsApp
+- [x] Carrinho + geração da mensagem de WhatsApp
 - [ ] Área administrativa
 
 ---
