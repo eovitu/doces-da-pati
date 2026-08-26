@@ -233,7 +233,7 @@ Workspace `90171496922`, espaço "Vitrine Doceria" (`90177083723`).
 - [ ] Renomeação `vitrine-doceria` → `doces-da-pati` no código
 - [ ] Dados reais no lugar dos dados de exemplo
 - [ ] Firestore ativado e populado
-- [ ] Redesign da vitrine
+- [x] Redesign da vitrine
 - [ ] Carrinho + geração da mensagem de WhatsApp
 - [ ] Área administrativa
 
