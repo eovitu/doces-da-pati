@@ -27,26 +27,6 @@ const Figura = styled.figure`
   }
 `;
 
-const Item = styled.article<{ $disponivel: boolean }>`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  ${Figura} {
-    opacity: ${({ $disponivel }) => ($disponivel ? 1 : 0.55)};
-  }
-
-  &:hover ${Figura} img {
-    transform: scale(1.03);
-  }
-
-  ${media.reducedMotion} {
-    &:hover ${Figura} img {
-      transform: none;
-    }
-  }
-`;
-
 const Placeholder = styled.div`
   display: flex;
   align-items: center;
@@ -59,6 +39,30 @@ const Placeholder = styled.div`
   font-size: ${theme.fontSize.lead};
   color: ${theme.colors.inkMuted};
   background: ${theme.colors.paper};
+`;
+
+const Item = styled.article<{ $disponivel: boolean }>`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* opacidade só na foto — o Selo "Esgotado" é filho de Figura e não pode
+     herdar isso, senão o contraste do próprio aviso de indisponibilidade
+     cai abaixo do AA (achado real do Lighthouse, não hipotético) */
+  ${Figura} img,
+  ${Figura} ${Placeholder} {
+    opacity: ${({ $disponivel }) => ($disponivel ? 1 : 0.55)};
+  }
+
+  &:hover ${Figura} img {
+    transform: scale(1.03);
+  }
+
+  ${media.reducedMotion} {
+    &:hover ${Figura} img {
+      transform: none;
+    }
+  }
 `;
 
 const Selo = styled.span`
