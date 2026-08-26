@@ -1,6 +1,7 @@
 export interface ProdutoImagem {
   url: string; // caminho relativo (/produtos/<slug>.webp) ou URL absoluta
   alt?: string;
+  path?: string; // caminho no Storage, só quando veio de upload pelo admin
 }
 
 export interface Produto {
@@ -13,9 +14,31 @@ export interface Produto {
   ativo: boolean;
   ordem: number;
   controlaEstoque: boolean;
-  estoque?: number;
+  estoque?: number; // usado quando o produto não tem sabores
   sabores?: string[];
+  // Presente só quando controlaEstoque && sabores.length > 0. Sabor ausente
+  // do mapa = sem controle individual, tratado como disponível.
+  estoquePorSabor?: Record<string, number>;
   destaque?: boolean;
+}
+
+/** Produto sem sabores: se esgotou o único estoque, some da vitrine. */
+export function produtoDisponivel(produto: Produto): boolean {
+  if (!produto.controlaEstoque) return true;
+  if (produto.sabores && produto.sabores.length > 0) {
+    return produto.sabores.some((sabor) => {
+      const quantidade = produto.estoquePorSabor?.[sabor];
+      return quantidade === undefined || quantidade > 0;
+    });
+  }
+  return (produto.estoque ?? 0) > 0;
+}
+
+/** Um sabor específico esgotou, mas outros do mesmo produto podem seguir à venda. */
+export function saborEsgotado(produto: Produto, sabor: string): boolean {
+  if (!produto.controlaEstoque) return false;
+  const quantidade = produto.estoquePorSabor?.[sabor];
+  return quantidade !== undefined && quantidade <= 0;
 }
 
 export interface Categoria {

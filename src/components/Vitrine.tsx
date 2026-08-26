@@ -6,20 +6,10 @@ import { theme, media } from "@/styles/theme";
 import { ProdutoItem } from "./ProdutoItem";
 import { Reveal } from "./Reveal";
 
-// Grid editorial, não malha uniforme: no desktop os 8 produtos ocupam quatro
-// linhas de larguras diferentes (7+5, 4+4+4, 6+6, 5 solto), como uma página de
-// revista. O padrão se repete se a Patricia cadastrar mais produtos.
-const SPANS_DESKTOP = [7, 5, 4, 4, 4, 6, 6, 5];
-const SIZES = [
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 58vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 42vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 50vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 50vw",
-  "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 42vw",
-];
+// Grid fixo: 1 coluna no mobile, 2 no tablet/desktop, cards com a mesma
+// altura em cada fileira. O grid editorial de larguras variáveis saiu daqui
+// por deixar buracos no fim de fileira (a última tinha só 5 de 12 colunas).
+const SIZES = "(max-width: 767px) 100vw, 50vw";
 
 const Secao = styled.section`
   margin: 0 auto;
@@ -65,20 +55,18 @@ const Grid = styled.ul`
     grid-template-columns: repeat(2, 1fr);
     gap: ${theme.spacing.xl} ${theme.spacing.lg};
   }
-
-  ${media.desktop} {
-    grid-template-columns: repeat(12, 1fr);
-    column-gap: ${theme.spacing.lg};
-    row-gap: ${theme.spacing.xxl};
-  }
 `;
 
-const Celula = styled.li<{ $span: number; $recuo: boolean }>`
-  ${media.desktop} {
-    grid-column: span ${({ $span }) => $span};
-    /* o segundo de cada par desce um pouco: é o que tira a página da malha */
-    padding-top: ${({ $recuo }) => ($recuo ? theme.spacing.xl : "0")};
-  }
+const Celula = styled.li`
+  height: 100%;
+`;
+
+// Reveal renderiza uma div comum; sem isso ela não estica pra acompanhar a
+// altura da fileira do grid, e o card de dentro não teria como preencher.
+const RevealCheia = styled(Reveal)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export function Vitrine({ produtos, whatsapp }: { produtos: Produto[]; whatsapp: string }) {
@@ -92,21 +80,18 @@ export function Vitrine({ produtos, whatsapp }: { produtos: Produto[]; whatsapp:
       </Cabecalho>
 
       <Grid>
-        {produtos.map((produto, i) => {
-          const span = SPANS_DESKTOP[i % SPANS_DESKTOP.length];
-          return (
-            <Celula key={produto.slug} $span={span} $recuo={span === 5 && i % 2 === 1}>
-              <Reveal>
-                <ProdutoItem
-                  produto={produto}
-                  whatsapp={whatsapp}
-                  sizes={SIZES[i % SIZES.length]}
-                  prioridade={i === 0}
-                />
-              </Reveal>
-            </Celula>
-          );
-        })}
+        {produtos.map((produto, i) => (
+          <Celula key={produto.slug}>
+            <RevealCheia>
+              <ProdutoItem
+                produto={produto}
+                whatsapp={whatsapp}
+                sizes={SIZES}
+                prioridade={i === 0}
+              />
+            </RevealCheia>
+          </Celula>
+        ))}
       </Grid>
     </Secao>
   );

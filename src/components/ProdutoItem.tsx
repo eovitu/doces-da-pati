@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import styled from "styled-components";
-import { Produto } from "@/types/produto";
+import { Produto, produtoDisponivel } from "@/types/produto";
 import { formatarPreco, linkPedidoWhatsapp } from "@/lib/whatsapp";
 import { AdicionarAoCarrinho } from "./AdicionarAoCarrinho";
 import { theme, media } from "@/styles/theme";
@@ -26,6 +26,7 @@ const Figura = styled.figure`
 `;
 
 const Item = styled.article<{ $disponivel: boolean }>`
+  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -72,10 +73,18 @@ const Selo = styled.span`
 `;
 
 const Texto = styled.div`
+  flex: 1;
   padding-top: ${theme.spacing.md};
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xs};
+
+  /* empurra o botão de adicionar pro fim do card, mesmo quando a fileira ao
+     lado tem descrição mais longa e deixa o card mais alto */
+  & > *:last-child {
+    margin-top: auto;
+    padding-top: ${theme.spacing.xs};
+  }
 `;
 
 const Nome = styled.h3`
@@ -119,7 +128,7 @@ export function ProdutoItem({
   prioridade?: boolean;
 }) {
   const imagem = produto.imagens[0];
-  const disponivel = !produto.controlaEstoque || (produto.estoque ?? 0) > 0;
+  const disponivel = produtoDisponivel(produto);
 
   return (
     <Item $disponivel={disponivel}>

@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
-import { Produto } from "@/types/produto";
+import { Produto, saborEsgotado } from "@/types/produto";
 
 import { useCarrinho } from "@/lib/carrinho";
 import { theme, media } from "@/styles/theme";
@@ -39,8 +39,14 @@ const Sabor = styled.button<{ $ativo: boolean }>`
   background: ${({ $ativo }) => ($ativo ? theme.colors.ink : "transparent")};
   color: ${({ $ativo }) => ($ativo ? theme.colors.background : theme.colors.inkSoft)};
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: ${({ $ativo }) => ($ativo ? theme.colors.ink : theme.colors.inkMuted)};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: line-through;
   }
 `;
 
@@ -158,17 +164,23 @@ export function AdicionarAoCarrinho({
         <>
           <Rotulo id={grupoId}>Escolha o sabor</Rotulo>
           <Sabores role="group" aria-labelledby={grupoId}>
-            {produto.sabores?.map((opcao) => (
-              <Sabor
-                key={opcao}
-                type="button"
-                $ativo={sabor === opcao}
-                aria-pressed={sabor === opcao}
-                onClick={() => setSabor(sabor === opcao ? undefined : opcao)}
-              >
-                {opcao}
-              </Sabor>
-            ))}
+            {produto.sabores?.map((opcao) => {
+              const esgotado = saborEsgotado(produto, opcao);
+              return (
+                <Sabor
+                  key={opcao}
+                  type="button"
+                  disabled={esgotado}
+                  $ativo={sabor === opcao}
+                  aria-pressed={sabor === opcao}
+                  aria-label={esgotado ? `${opcao} — esgotado` : opcao}
+                  onClick={() => setSabor(sabor === opcao ? undefined : opcao)}
+                >
+                  {opcao}
+                  {esgotado && " (esgotado)"}
+                </Sabor>
+              );
+            })}
           </Sabores>
         </>
       )}
