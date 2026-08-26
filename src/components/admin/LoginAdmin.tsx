@@ -2,6 +2,8 @@
 
 import { useId, useState } from "react";
 import { useAdminAuth } from "@/lib/admin-auth";
+import { firebaseConfigurado } from "@/lib/firebase";
+import { MENSAGEM_CONFIG, mensagemDeErroDeLogin } from "@/lib/erros-auth";
 import {
   Botao,
   Campo,
@@ -14,9 +16,6 @@ import {
   Subtitulo,
   Titulo,
 } from "./ui";
-
-// A Patricia não é desenvolvedora: nada de código de erro do Firebase na tela.
-const ERRO_GENERICO = "Não foi possível entrar. Verifique seu email e senha.";
 
 export function LoginAdmin() {
   const { entrar } = useAdminAuth();
@@ -34,8 +33,8 @@ export function LoginAdmin() {
     setEnviando(true);
     try {
       await entrar(email, senha);
-    } catch {
-      setErro(ERRO_GENERICO);
+    } catch (falha) {
+      setErro(mensagemDeErroDeLogin(falha));
       setEnviando(false);
     }
   }
@@ -48,6 +47,9 @@ export function LoginAdmin() {
 
         <Cartao>
           <form onSubmit={aoEnviar} noValidate>
+            {!firebaseConfigurado && (
+              <Mensagem role="alert">{MENSAGEM_CONFIG}</Mensagem>
+            )}
             {erro && (
               <Mensagem id={idErro} role="alert">
                 {erro}
@@ -88,7 +90,10 @@ export function LoginAdmin() {
               />
             </Campo>
 
-            <Botao type="submit" disabled={enviando || !email || !senha}>
+            <Botao
+              type="submit"
+              disabled={enviando || !email || !senha || !firebaseConfigurado}
+            >
               {enviando ? "Entrando…" : "Entrar"}
             </Botao>
           </form>

@@ -78,14 +78,11 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const entrar = useCallback(async (email: string, senha: string) => {
-    setEstado("carregando");
-    try {
-      await signInWithEmailAndPassword(getAuthClient(), email.trim(), senha);
-      // O onAuthStateChanged acima resolve o estado final (autorizado ou não).
-    } catch (erro) {
-      setEstado("deslogado");
-      throw erro;
-    }
+    // Sem mexer no estado global aqui: quem mostra "entrando…" é o próprio
+    // formulário. Se isto virasse "carregando", o porteiro trocaria a tela de
+    // login pela de carregamento e a mensagem de erro não teria onde aparecer.
+    // O onAuthStateChanged resolve o estado final (autorizado ou não).
+    await signInWithEmailAndPassword(getAuthClient(), email.trim(), senha);
   }, []);
 
   const sair = useCallback(async () => {
