@@ -10,6 +10,7 @@ import { CarrinhoProvider } from "@/lib/carrinho";
 import { BarraCarrinho } from "@/components/BarraCarrinho";
 import { CarrinhoSheet } from "@/components/CarrinhoSheet";
 import { linkEncomendaWhatsapp } from "@/lib/whatsapp";
+import { jsonLdLoja } from "@/lib/jsonld";
 
 // Com o Firebase ligado, os dados vêm do Firestore e mudam pelo admin — sem
 // revalidação a vitrine ficaria presa aos dados do último build. 60s é
@@ -27,6 +28,10 @@ export default async function Home() {
 
   return (
     <CarrinhoProvider>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdLoja(loja, produtos) }}
+      />
       <SkipLink />
       {aviso?.ativo && <AvisoTemporario mensagem={aviso.mensagem} />}
       <SiteHeader loja={loja} />

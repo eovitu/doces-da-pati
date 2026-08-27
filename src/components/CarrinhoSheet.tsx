@@ -8,6 +8,7 @@ import { rotuloItem, subtotalItem } from "@/types/carrinho";
 import { formatarPreco } from "@/lib/whatsapp";
 import { formatarDataHora, linkPedidoCompleto } from "@/lib/pedido";
 import { theme, media } from "@/styles/theme";
+import { gerarLead, iniciarCheckout } from "@/lib/analytics";
 
 type Etapa = "carrinho" | "nome" | "resumo";
 
@@ -379,6 +380,7 @@ export function CarrinhoSheet({ whatsapp }: { whatsapp: string }) {
     if (itens.length === 0) return;
     setErro(null);
     setEtapa("nome");
+    iniciarCheckout(itens);
   }
 
   function confirmarNome(evento: React.FormEvent) {
@@ -394,7 +396,10 @@ export function CarrinhoSheet({ whatsapp }: { whatsapp: string }) {
   }
 
   function aoEnviar() {
-    // A conversa abre com a mensagem pronta; quem envia é a pessoa.
+    // A conversa abre com a mensagem pronta; quem envia é a pessoa. O carrinho
+    // ainda não coleta tipo de entrega nem forma de pagamento, então o lead
+    // vai sem esses dois parâmetros em vez de inventar um valor.
+    gerarLead(itens, null, null);
     limpar();
     fechar();
   }

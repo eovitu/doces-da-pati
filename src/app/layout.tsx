@@ -3,6 +3,8 @@ import { Fraunces, Karla } from "next/font/google";
 import StyledComponentsRegistry from "@/lib/registry";
 import { GlobalStyle } from "@/styles/GlobalStyle";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { ConsentBanner } from "@/components/ConsentBanner";
 import "./globals.css";
 
 // Display: serifada moderna, com personalidade — combina com doce artesanal.
@@ -68,7 +70,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <StyledComponentsRegistry>
           <GlobalStyle />
           <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          <ConsentBanner />
         </StyledComponentsRegistry>
+        <GoogleAnalytics />
       </body>
     </html>
   );

@@ -1,9 +1,11 @@
 "use client";
 
 import styled from "styled-components";
+import NextLink from "next/link";
 import { BairroEntrega, LojaInfo } from "@/types/produto";
 import { linkContatoWhatsapp } from "@/lib/whatsapp";
 import { theme, media } from "@/styles/theme";
+import { reabrirPreferenciasCookies } from "./ConsentBanner";
 
 const ROTULO_PAGAMENTO: Record<string, string> = {
   pix: "Pix",
@@ -96,6 +98,26 @@ const Base = styled.div`
   color: ${theme.colors.inkMuted};
 `;
 
+const LinksLegais = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${theme.spacing.xs} ${theme.spacing.md};
+
+  a,
+  button {
+    font: inherit;
+    color: ${theme.colors.inkMuted};
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
+    &:hover {
+      color: ${theme.colors.ink};
+    }
+  }
+`;
+
 export function SiteFooter({
   loja,
   bairros,
@@ -153,6 +175,13 @@ export function SiteFooter({
 
         <Base>
           <span>{loja.cnpjOuNome ?? loja.nome}</span>
+          <LinksLegais>
+            <NextLink href="/privacidade">Política de Privacidade</NextLink>
+            <NextLink href="/termos">Termos de Uso</NextLink>
+            <button type="button" onClick={reabrirPreferenciasCookies}>
+              Preferências de cookies
+            </button>
+          </LinksLegais>
           <span>Pedidos e confirmação pelo WhatsApp</span>
         </Base>
       </Inner>

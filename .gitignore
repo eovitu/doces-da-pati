@@ -39,6 +39,12 @@ service-account.json
 # vercel
 .vercel
 
+# firebase emulators
+.firebase
+firestore-debug.log
+ui-debug.log
+firebase-debug.log
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

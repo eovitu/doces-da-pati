@@ -153,8 +153,8 @@ export const LinhaCheckbox = styled.label`
 export const BotaoIcone = styled.button`
   font-family: ${theme.typography.body};
   font-size: ${theme.fontSize.small};
-  min-height: 36px;
-  min-width: 36px;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0 ${theme.spacing.xs};
   color: ${theme.colors.inkSoft};
   background: ${theme.colors.background};
