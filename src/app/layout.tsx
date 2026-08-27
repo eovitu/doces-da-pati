@@ -30,6 +30,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://doces-da-pati.vercel.app"),
   title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
   description: descricao,
+  icons: {
+    icon: "/produtos/logo-doces-da-pati.jpg",
+    apple: "/produtos/logo-doces-da-pati.jpg",
+  },
   keywords: [
     "doces artesanais",
     "espetinho de morango",
