@@ -10,7 +10,6 @@ import {
   reordenarProdutos,
   salvarProduto,
 } from "@/lib/admin-produtos";
-import { uploadFotoProduto } from "@/lib/admin-storage";
 import {
   BotaoIcone,
   Botao,
@@ -74,14 +73,6 @@ const Acoes = styled.div`
   ${media.tablet} {
     flex-shrink: 0;
   }
-`;
-
-const PreviewFoto = styled.img`
-  width: 96px;
-  height: 96px;
-  object-fit: cover;
-  border-radius: ${theme.radii.sm};
-  border: 1px solid ${theme.colors.line};
 `;
 
 const Grade = styled.div`
@@ -158,22 +149,8 @@ const FORMULARIO_VAZIO: FormularioProduto = {
 export function ProdutosAdmin() {
   const [produtos, setProdutos] = useState<Produto[] | null>(null);
   const [formulario, setFormulario] = useState<FormularioProduto | null>(null);
-  const [novaFoto, setNovaFoto] = useState<File | null>(null);
-  const [previewFoto, setPreviewFoto] = useState<string | null>(null);
-  const [enviandoFoto, setEnviandoFoto] = useState(false);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-
-  function abrirFormulario(dados: FormularioProduto) {
-    setFormulario(dados);
-    setNovaFoto(null);
-    setPreviewFoto(null);
-  }
-
-  function escolherFoto(arquivo: File | null) {
-    setNovaFoto(arquivo);
-    setPreviewFoto(arquivo ? URL.createObjectURL(arquivo) : null);
-  }
 
   async function recarregar() {
     setProdutos(await listarTodosProdutos());
@@ -218,26 +195,14 @@ export function ProdutosAdmin() {
       }
     }
 
-    let imagens = existente?.imagens ?? [];
-    if (novaFoto) {
-      setEnviandoFoto(true);
-      try {
-        const { url, path } = await uploadFotoProduto(slug, novaFoto);
-        imagens = [{ url, path }];
-      } catch {
-        setErro("Não foi possível enviar a foto. Tente de novo.");
-        setEnviandoFoto(false);
-        return;
-      }
-      setEnviandoFoto(false);
-    }
-
     const produto: Produto = {
       slug,
       nome: formulario.nome.trim(),
       descricao: formulario.descricao.trim() || undefined,
       preco: paraCentavos(formulario.preco),
-      imagens,
+      imagens: formulario.imagemUrl.trim()
+        ? [{ url: formulario.imagemUrl.trim() }]
+        : [],
       ativo: formulario.ativo,
       ordem: existente?.ordem ?? produtos?.length ?? 0,
       controlaEstoque: formulario.controlaEstoque,
@@ -254,8 +219,6 @@ export function ProdutosAdmin() {
     try {
       await salvarProduto(produto);
       setFormulario(null);
-      setNovaFoto(null);
-      setPreviewFoto(null);
       await recarregar();
     } catch {
       setErro("Não foi possível salvar. Tente de novo em instantes.");
@@ -335,7 +298,7 @@ export function ProdutosAdmin() {
                 </BotaoIcone>
                 <BotaoIcone
                   type="button"
-                  onClick={() => abrirFormulario(produtoParaFormulario(produto))}
+                  onClick={() => setFormulario(produtoParaFormulario(produto))}
                 >
                   Editar
                 </BotaoIcone>
@@ -388,20 +351,15 @@ export function ProdutosAdmin() {
           </Campo>
 
           <Campo>
-            <Rotulo htmlFor="produto-imagem">Foto do produto</Rotulo>
-            {(previewFoto || formulario.imagemUrl) && (
-              <PreviewFoto
-                src={previewFoto ?? formulario.imagemUrl}
-                alt=""
-              />
-            )}
+            <Rotulo htmlFor="produto-imagem">Foto (caminho ou URL)</Rotulo>
             <Input
               id="produto-imagem"
-              type="file"
-              accept="image/*"
-              onChange={(e) => escolherFoto(e.target.files?.[0] ?? null)}
+              placeholder="/produtos/exemplo.webp"
+              value={formulario.imagemUrl}
+              onChange={(e) =>
+                setFormulario({ ...formulario, imagemUrl: e.target.value })
+              }
             />
-            {enviandoFoto && <DetalheProduto>Enviando foto…</DetalheProduto>}
           </Campo>
 
           <Campo>
@@ -486,17 +444,10 @@ export function ProdutosAdmin() {
           </Campo>
 
           <div style={{ display: "flex", gap: theme.spacing.sm }}>
-            <Botao type="submit" disabled={salvando || enviandoFoto}>
-              {enviandoFoto ? "Enviando foto…" : salvando ? "Salvando…" : "Salvar produto"}
+            <Botao type="submit" disabled={salvando}>
+              {salvando ? "Salvando…" : "Salvar produto"}
             </Botao>
-            <BotaoSecundario
-              type="button"
-              onClick={() => {
-                setFormulario(null);
-                setNovaFoto(null);
-                setPreviewFoto(null);
-              }}
-            >
+            <BotaoSecundario type="button" onClick={() => setFormulario(null)}>
               Cancelar
             </BotaoSecundario>
           </div>
@@ -505,7 +456,7 @@ export function ProdutosAdmin() {
         <Botao
           type="button"
           style={{ marginTop: theme.spacing.md }}
-          onClick={() => abrirFormulario(FORMULARIO_VAZIO)}
+          onClick={() => setFormulario(FORMULARIO_VAZIO)}
         >
           Adicionar produto
         </Botao>
