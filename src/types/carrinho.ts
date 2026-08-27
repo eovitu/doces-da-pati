@@ -1,4 +1,4 @@
-import { Produto } from "./produto";
+import { precoComSabor, Produto } from "./produto";
 
 /**
  * Uma linha do carrinho. Sabores diferentes do mesmo produto são linhas
@@ -33,7 +33,7 @@ export function novoItem(produto: Produto, sabor: string | undefined, quantidade
     id: idItem(produto.slug, sabor),
     produtoSlug: produto.slug,
     nome: produto.nome,
-    precoUnitario: produto.preco,
+    precoUnitario: precoComSabor(produto, sabor),
     sabor,
     quantidade,
   };

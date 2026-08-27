@@ -3,9 +3,10 @@
 import { useEffect, useId, useRef, useState } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
-import { Produto, saborEsgotado } from "@/types/produto";
+import { precoComSabor, Produto, saborEsgotado } from "@/types/produto";
 
 import { useCarrinho } from "@/lib/carrinho";
+import { formatarPreco } from "@/lib/whatsapp";
 import { theme, media } from "@/styles/theme";
 
 const Bloco = styled.div`
@@ -172,6 +173,7 @@ export function AdicionarAoCarrinho({
           <Sabores role="group" aria-labelledby={grupoId}>
             {produto.sabores?.map((opcao) => {
               const esgotado = saborEsgotado(produto, opcao);
+              const adicional = produto.precoAdicionalPorSabor?.[opcao] ?? 0;
               return (
                 <Sabor
                   key={opcao}
@@ -183,6 +185,7 @@ export function AdicionarAoCarrinho({
                   onClick={() => setSabor(sabor === opcao ? undefined : opcao)}
                 >
                   {opcao}
+                  {adicional > 0 && ` (+${formatarPreco(adicional)})`}
                   {esgotado && " (esgotado)"}
                 </Sabor>
               );
@@ -203,6 +206,8 @@ export function AdicionarAoCarrinho({
         </Botao>
         {faltaEscolherSabor ? (
           <Aviso>Escolha um sabor para adicionar</Aviso>
+        ) : sabor && precoComSabor(produto, sabor) !== produto.preco ? (
+          <NoCarrinho>{formatarPreco(precoComSabor(produto, sabor))}</NoCarrinho>
         ) : (
           noCarrinho > 0 && (
             <NoCarrinho>
