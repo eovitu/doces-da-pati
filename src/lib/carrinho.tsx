@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Produto } from "@/types/produto";
+import { precoComSabor, Produto } from "@/types/produto";
 import { ItemCarrinho, idItem, novoItem, subtotalItem } from "@/types/carrinho";
 import { adicionarAoCarrinho as registrarAdicaoGA, removerDoCarrinho as registrarRemocaoGA } from "./analytics";
 
@@ -130,7 +130,7 @@ export function CarrinhoProvider({ children }: { children: React.ReactNode }) {
       registrarAdicaoGA({
         produtoSlug: produto.slug,
         nome: produto.nome,
-        precoUnitario: produto.preco,
+        precoUnitario: precoComSabor(produto, sabor),
         sabor,
         quantidade,
       });

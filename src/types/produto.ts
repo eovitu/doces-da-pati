@@ -19,7 +19,17 @@ export interface Produto {
   // Presente só quando controlaEstoque && sabores.length > 0. Sabor ausente
   // do mapa = sem controle individual, tratado como disponível.
   estoquePorSabor?: Record<string, number>;
+  // Acréscimo em centavos sobre `preco`, só para sabores mais caros (ex.:
+  // Ninho com Nutella +200). Sabor ausente do mapa = sem acréscimo (0).
+  // Retrocompatível: produtos antigos não têm o campo, então tudo cai em 0.
+  precoAdicionalPorSabor?: Record<string, number>;
   destaque?: boolean;
+}
+
+/** Preço final (centavos) do produto com o sabor escolhido, se houver. */
+export function precoComSabor(produto: Pick<Produto, "preco" | "precoAdicionalPorSabor">, sabor?: string): number {
+  const adicional = sabor ? produto.precoAdicionalPorSabor?.[sabor] ?? 0 : 0;
+  return produto.preco + adicional;
 }
 
 /** Produto sem sabores: se esgotou o único estoque, some da vitrine. */
