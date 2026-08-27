@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
   description: descricao,
   icons: {
-    icon: "/produtos/logo-doces-da-pati.jpg",
-    apple: "/produtos/logo-doces-da-pati.jpg",
+    icon: "/produtos/logo-doces-da-pati.png",
+    apple: "/produtos/logo-doces-da-pati.png",
   },
   keywords: [
     "doces artesanais",

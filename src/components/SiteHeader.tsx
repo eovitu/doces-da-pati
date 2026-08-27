@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import styled from "styled-components";
 import { LojaInfo } from "@/types/produto";
 import { linkContatoWhatsapp } from "@/lib/whatsapp";
@@ -19,16 +18,6 @@ const Inner = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: ${theme.maxWidth};
-`;
-
-const Logo = styled(Image)`
-  height: 48px;
-  width: auto;
-  margin-bottom: ${theme.spacing.md};
-
-  ${media.desktop} {
-    height: 64px;
-  }
 `;
 
 const Sobretitulo = styled.p`
@@ -113,13 +102,6 @@ export function SiteHeader({ loja }: { loja: LojaInfo }) {
     <Reveal as="header">
       <Header>
         <Inner>
-          <Logo
-            src="/produtos/logo-doces-da-pati.jpg"
-            alt={loja.nome}
-            width={160}
-            height={87}
-            priority
-          />
           <Sobretitulo>Doceria artesanal · {loja.regiao}</Sobretitulo>
           <Nome>{loja.nome}</Nome>
           <Frase>
