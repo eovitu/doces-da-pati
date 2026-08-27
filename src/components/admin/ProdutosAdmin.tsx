@@ -103,6 +103,7 @@ interface FormularioProduto {
   controlaEstoque: boolean;
   estoque: string;
   estoquePorSabor: Record<string, string>;
+  precoAdicionalPorSabor: Record<string, string>;
   ativo: boolean;
 }
 
@@ -115,9 +116,12 @@ function listaDeSabores(saboresTexto: string): string[] {
 
 function produtoParaFormulario(produto: Produto): FormularioProduto {
   const estoquePorSabor: Record<string, string> = {};
+  const precoAdicionalPorSabor: Record<string, string> = {};
   for (const sabor of produto.sabores ?? []) {
     const quantidade = produto.estoquePorSabor?.[sabor];
     if (quantidade !== undefined) estoquePorSabor[sabor] = String(quantidade);
+    const adicional = produto.precoAdicionalPorSabor?.[sabor];
+    if (adicional) precoAdicionalPorSabor[sabor] = formatarCentavos(adicional);
   }
   return {
     slugOriginal: produto.slug,
@@ -129,6 +133,7 @@ function produtoParaFormulario(produto: Produto): FormularioProduto {
     controlaEstoque: produto.controlaEstoque,
     estoque: produto.estoque != null ? String(produto.estoque) : "",
     estoquePorSabor,
+    precoAdicionalPorSabor,
     ativo: produto.ativo,
   };
 }
@@ -143,6 +148,7 @@ const FORMULARIO_VAZIO: FormularioProduto = {
   controlaEstoque: false,
   estoque: "",
   estoquePorSabor: {},
+  precoAdicionalPorSabor: {},
   ativo: true,
 };
 
@@ -195,6 +201,16 @@ export function ProdutosAdmin() {
       }
     }
 
+    const precoAdicionalPorSabor: Record<string, number> = {};
+    if (temSabores) {
+      for (const s of sabores) {
+        const valor = formulario.precoAdicionalPorSabor[s];
+        if (valor !== undefined && valor.trim() !== "") {
+          precoAdicionalPorSabor[s] = paraCentavos(valor);
+        }
+      }
+    }
+
     const produto: Produto = {
       slug,
       nome: formulario.nome.trim(),
@@ -212,6 +228,7 @@ export function ProdutosAdmin() {
           : undefined,
       estoquePorSabor:
         formulario.controlaEstoque && temSabores ? estoquePorSabor : undefined,
+      precoAdicionalPorSabor: temSabores ? precoAdicionalPorSabor : undefined,
       sabores,
     };
 
@@ -372,6 +389,31 @@ export function ProdutosAdmin() {
               }
             />
           </Campo>
+
+          {listaDeSabores(formulario.sabores).length > 0 && (
+            <Campo>
+              <Rotulo>Acréscimo de preço por sabor (opcional)</Rotulo>
+              {listaDeSabores(formulario.sabores).map((s) => (
+                <Grade key={s} style={{ alignItems: "center", marginTop: theme.spacing.xxs }}>
+                  <DetalheProduto>{s}</DetalheProduto>
+                  <Input
+                    inputMode="decimal"
+                    placeholder="0,00"
+                    value={formulario.precoAdicionalPorSabor[s] ?? ""}
+                    onChange={(e) =>
+                      setFormulario({
+                        ...formulario,
+                        precoAdicionalPorSabor: {
+                          ...formulario.precoAdicionalPorSabor,
+                          [s]: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </Grade>
+              ))}
+            </Campo>
+          )}
 
           <Campo>
             <LinhaCheckbox>
