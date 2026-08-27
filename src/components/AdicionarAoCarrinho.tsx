@@ -30,6 +30,7 @@ const Sabores = styled.div`
 const Sabor = styled.button<{ $ativo: boolean }>`
   font-family: inherit;
   font-size: ${theme.fontSize.small};
+  min-height: 44px;
   padding: 0.4rem 0.85rem;
   border-radius: ${theme.radii.pill};
   cursor: pointer;
@@ -41,6 +42,11 @@ const Sabor = styled.button<{ $ativo: boolean }>`
 
   &:hover:not(:disabled) {
     border-color: ${({ $ativo }) => ($ativo ? theme.colors.ink : theme.colors.inkMuted)};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${theme.colors.accent};
+    outline-offset: 2px;
   }
 
   &:disabled {

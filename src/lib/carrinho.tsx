@@ -12,6 +12,7 @@ import {
 } from "react";
 import { Produto } from "@/types/produto";
 import { ItemCarrinho, idItem, novoItem, subtotalItem } from "@/types/carrinho";
+import { adicionarAoCarrinho as registrarAdicaoGA, removerDoCarrinho as registrarRemocaoGA } from "./analytics";
 
 // Carrinho vive só no cliente: nada de Firestore, nada de backend. O
 // localStorage existe apenas para o pedido sobreviver a um recarregamento
@@ -126,6 +127,13 @@ export function CarrinhoProvider({ children }: { children: React.ReactNode }) {
     (produto: Produto, sabor?: string, quantidade = 1) => {
       dispatch({ tipo: "adicionar", produto, sabor, quantidade });
       setUltimoAdicionado(idItem(produto.slug, sabor));
+      registrarAdicaoGA({
+        produtoSlug: produto.slug,
+        nome: produto.nome,
+        precoUnitario: produto.preco,
+        sabor,
+        quantidade,
+      });
     },
     []
   );
@@ -134,9 +142,14 @@ export function CarrinhoProvider({ children }: { children: React.ReactNode }) {
     dispatch({ tipo: "definirQuantidade", id, quantidade });
   }, []);
 
-  const remover = useCallback((id: string) => {
-    dispatch({ tipo: "remover", id });
-  }, []);
+  const remover = useCallback(
+    (id: string) => {
+      const item = itens.find((i) => i.id === id);
+      dispatch({ tipo: "remover", id });
+      if (item) registrarRemocaoGA(item);
+    },
+    [itens]
+  );
 
   const limpar = useCallback(() => dispatch({ tipo: "limpar" }), []);
   const abrir = useCallback(() => setAberto(true), []);

@@ -1,0 +1,38 @@
+# Os Doces da Pati
+
+Catálogo online de uma doceria de bairro na zona sul de São Paulo (Brasil).
+
+## O que é
+
+Site de vitrine digital: mostra os produtos com foto e preço, o cliente
+monta o pedido no carrinho e finaliza a compra pelo WhatsApp. Não há
+checkout nem pagamento online no site.
+
+## Produtos
+
+Espetinhos de morango e uva, pão de mel (vários sabores), bombom no pote,
+lanche natural e suco natural. Encomendas para festinha (brigadeiro e pão
+de mel) são sob consulta pelo WhatsApp.
+
+## Região atendida
+
+São Paulo, zona sul. Retirada no Parque Regina. Entrega nos bairros Campo
+Limpo, Vila Andrade, Parque Araribá, Jardim Inga e Jardim Olinda.
+
+## Como funciona um pedido
+
+1. O cliente escolhe os produtos e monta o carrinho no site.
+2. Ao finalizar, informa o nome.
+3. O site abre uma conversa no WhatsApp com o resumo do pedido já escrito.
+4. A confirmação de disponibilidade, forma de pagamento e entrega acontece
+   na conversa com a loja pelo WhatsApp.
+
+## Atendimento
+
+Terça a domingo, das 12h às 22h. Entregas das 18h às 22h. Pagamento por
+Pix ou cartão (maquininha).
+
+## Contato
+
+WhatsApp: +55 11 98609-2770
+Instagram: https://www.instagram.com/osdocesdapati

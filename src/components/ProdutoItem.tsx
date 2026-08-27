@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { Produto, produtoDisponivel } from "@/types/produto";
 import { formatarPreco, linkPedidoWhatsapp } from "@/lib/whatsapp";
+import { visualizarProduto } from "@/lib/analytics";
 import { AdicionarAoCarrinho } from "./AdicionarAoCarrinho";
 import { theme, media } from "@/styles/theme";
 
@@ -25,26 +27,6 @@ const Figura = styled.figure`
   }
 `;
 
-const Item = styled.article<{ $disponivel: boolean }>`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  ${Figura} {
-    opacity: ${({ $disponivel }) => ($disponivel ? 1 : 0.55)};
-  }
-
-  &:hover ${Figura} img {
-    transform: scale(1.03);
-  }
-
-  ${media.reducedMotion} {
-    &:hover ${Figura} img {
-      transform: none;
-    }
-  }
-`;
-
 const Placeholder = styled.div`
   display: flex;
   align-items: center;
@@ -57,6 +39,30 @@ const Placeholder = styled.div`
   font-size: ${theme.fontSize.lead};
   color: ${theme.colors.inkMuted};
   background: ${theme.colors.paper};
+`;
+
+const Item = styled.article<{ $disponivel: boolean }>`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* opacidade só na foto — o Selo "Esgotado" é filho de Figura e não pode
+     herdar isso, senão o contraste do próprio aviso de indisponibilidade
+     cai abaixo do AA (achado real do Lighthouse, não hipotético) */
+  ${Figura} img,
+  ${Figura} ${Placeholder} {
+    opacity: ${({ $disponivel }) => ($disponivel ? 1 : 0.55)};
+  }
+
+  &:hover ${Figura} img {
+    transform: scale(1.03);
+  }
+
+  ${media.reducedMotion} {
+    &:hover ${Figura} img {
+      transform: none;
+    }
+  }
 `;
 
 const Selo = styled.span`
@@ -129,9 +135,28 @@ export function ProdutoItem({
 }) {
   const imagem = produto.imagens[0];
   const disponivel = produtoDisponivel(produto);
+  const itemRef = useRef<HTMLElement>(null);
+
+  // Impressão do produto pra GA4 — desacoplado do Reveal/GSAP de propósito,
+  // pra não misturar telemetria com a animação de entrada.
+  useEffect(() => {
+    const el = itemRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) {
+          visualizarProduto(produto);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [produto]);
 
   return (
-    <Item $disponivel={disponivel}>
+    <Item ref={itemRef} $disponivel={disponivel}>
       <Figura>
         {imagem ? (
           <Image
