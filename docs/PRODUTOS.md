@@ -18,6 +18,7 @@ Preços em centavos, conforme a convenção da especificação.
 | 6 | Bombom de uva no pote | `bombom-de-uva-no-pote` | 1800 | Potes |
 | 7 | Lanche natural | `lanche-natural` | 1200 | Salgados |
 | 8 | Suco natural 250ml | `suco-natural` | 700 | Bebidas |
+| 9 | Morango cravejado | `morango-cravejado` | 1500 | Espetinhos |
 
 ## Descrições
 
@@ -41,6 +42,10 @@ brigadeiro de ninho com uma camada de ganache de chocolate ao leite.
 cenoura, tomate e alface.
 
 **Suco natural 250ml** — Sabores: goiaba, manga, maracujá, acerola, morango.
+
+**Morango cravejado** — Morango recheado com chocolate branco e cravejado com
+pedaços de morango liofilizado. Adicionado depois do catálogo original, a
+pedido do Victor.
 
 ## Sabores (campo `sabores`)
 
