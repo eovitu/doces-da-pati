@@ -86,6 +86,16 @@ export const produtosSeed: Produto[] = [
     controlaEstoque: false,
     sabores: ["Goiaba", "Manga", "Maracujá", "Acerola", "Morango"],
   },
+  {
+    slug: "morango-cravejado",
+    nome: "Morango cravejado",
+    descricao: "Morango recheado com chocolate branco e cravejado com pedaços de morango liofilizado.",
+    preco: 1500,
+    imagens: [{ url: "/produtos/morango-cravejado.webp" }],
+    ativo: true,
+    ordem: 8,
+    controlaEstoque: false,
+  },
 ];
 
 export const lojaInfoSeed: LojaInfo = {

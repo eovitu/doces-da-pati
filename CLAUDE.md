@@ -82,6 +82,7 @@ Preços em **centavos** no banco (`1500` = R$ 15,00).
 | Bombom de uva no pote | `bombom-de-uva-no-pote` | 1800 |
 | Lanche natural | `lanche-natural` | 1200 |
 | Suco natural 250ml | `suco-natural` | 700 |
+| Morango cravejado | `morango-cravejado` | 1500 |
 
 Descrições e sabores completos estão em [`docs/PRODUTOS.md`](docs/PRODUTOS.md).
 
