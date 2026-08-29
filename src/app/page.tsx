@@ -3,6 +3,7 @@ import { getEntregaConfig, getLojaInfo } from "@/lib/loja";
 import { SiteHeader } from "@/components/SiteHeader";
 import { AvisoTemporario } from "@/components/AvisoTemporario";
 import { Vitrine } from "@/components/Vitrine";
+import { ProdutosDestaque } from "@/components/ProdutosDestaque";
 import { Encomendas } from "@/components/Encomendas";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkipLink } from "@/components/SkipLink";
@@ -11,6 +12,7 @@ import { BarraCarrinho } from "@/components/BarraCarrinho";
 import { CarrinhoSheet } from "@/components/CarrinhoSheet";
 import { linkEncomendaWhatsapp } from "@/lib/whatsapp";
 import { jsonLdLoja } from "@/lib/jsonld";
+import { selecionarProdutosDestaque } from "@/lib/destaques";
 
 // Com o Firebase ligado, os dados vêm do Firestore e mudam pelo admin — sem
 // revalidação a vitrine ficaria presa aos dados do último build. 60s é
@@ -25,6 +27,7 @@ export default async function Home() {
     getEntregaConfig(),
   ]);
   const aviso = loja.avisoTemporario;
+  const produtosDestaque = selecionarProdutosDestaque(produtos);
 
   return (
     <CarrinhoProvider>
@@ -36,6 +39,7 @@ export default async function Home() {
       {aviso?.ativo && <AvisoTemporario mensagem={aviso.mensagem} />}
       <SiteHeader loja={loja} />
       <main id="conteudo">
+        <ProdutosDestaque produtos={produtosDestaque} whatsapp={loja.whatsapp} />
         <Vitrine produtos={produtos} whatsapp={loja.whatsapp} />
         <Encomendas href={linkEncomendaWhatsapp(loja.whatsapp)} />
       </main>

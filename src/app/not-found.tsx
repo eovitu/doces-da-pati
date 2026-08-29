@@ -10,12 +10,14 @@ const Page = styled.main`
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
+  justify-content: flex-start;
+  overflow-x: hidden;
   position: relative;
-  padding: ${theme.spacing.lg} ${theme.spacing.md};
+  padding: 8.5rem ${theme.spacing.md} ${theme.spacing.lg};
 
   ${media.tablet} {
+    justify-content: center;
+    overflow: hidden;
     padding: ${theme.spacing.xl} ${theme.spacing.lg};
   }
 `;
@@ -27,13 +29,18 @@ const Header = styled.div`
   right: ${theme.spacing.md};
 
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: ${theme.spacing.sm};
 
   ${media.tablet} {
     top: ${theme.spacing.xl};
     left: ${theme.spacing.lg};
     right: ${theme.spacing.lg};
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
   }
 `;
 
@@ -68,7 +75,11 @@ const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.md};
+
+  ${media.tablet} {
+    gap: ${theme.spacing.xl};
+  }
 
   ${media.desktop} {
     grid-template-columns: 1.15fr 0.85fr;
@@ -82,18 +93,22 @@ const Copy = styled.div`
 `;
 
 const Eyebrow = styled.p`
-  margin-bottom: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.sm};
 
   font-size: ${theme.fontSize.micro};
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: ${theme.colors.accent};
+
+  ${media.tablet} {
+    margin-bottom: ${theme.spacing.md};
+  }
 `;
 
 const Title = styled.h1`
-  font-size: clamp(4.5rem, 19vw, 13rem);
-  line-height: 0.78;
+  font-size: clamp(4.5rem, 25vw, 7rem);
+  line-height: 0.82;
   letter-spacing: -0.065em;
   color: ${theme.colors.ink};
 
@@ -103,6 +118,11 @@ const Title = styled.h1`
     color: ${theme.colors.accent};
   }
 
+  ${media.tablet} {
+    font-size: clamp(4.5rem, 19vw, 13rem);
+    line-height: 0.78;
+  }
+
   ${media.desktop} {
     font-size: clamp(7rem, 12vw, 12rem);
   }
@@ -110,18 +130,29 @@ const Title = styled.h1`
 
 const Heading = styled.h2`
   max-width: 11ch;
-  margin-top: ${theme.spacing.lg};
+  margin-top: ${theme.spacing.md};
 
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(1.75rem, 8.5vw, 2.25rem);
   letter-spacing: -0.035em;
+
+  ${media.tablet} {
+    margin-top: ${theme.spacing.lg};
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
 `;
 
 const Description = styled.p`
   max-width: 38ch;
   margin-top: ${theme.spacing.md};
 
-  font-size: ${theme.fontSize.lead};
+  font-size: ${theme.fontSize.body};
+  line-height: 1.5;
   color: ${theme.colors.inkSoft};
+
+  ${media.tablet} {
+    font-size: ${theme.fontSize.lead};
+    line-height: normal;
+  }
 `;
 
 const BackButton = styled(Link)`
@@ -129,7 +160,7 @@ const BackButton = styled(Link)`
   align-items: center;
   justify-content: center;
 
-  margin-top: ${theme.spacing.lg};
+  margin-top: ${theme.spacing.md};
   padding: 0.875rem 1.5rem;
 
   border-radius: ${theme.radii.pill};
@@ -148,17 +179,25 @@ const BackButton = styled(Link)`
     background: ${theme.colors.accentHover};
     transform: translateY(-2px);
   }
+
+  ${media.tablet} {
+    margin-top: ${theme.spacing.lg};
+  }
 `;
 
 const Illustration = styled.div`
   position: relative;
-  width: min(100%, 440px);
+  width: min(68vw, 230px);
   aspect-ratio: 1;
   margin: 0 auto;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  ${media.tablet} {
+    width: min(100%, 440px);
+  }
 
   ${media.desktop} {
     width: min(100%, 500px);
@@ -328,16 +367,16 @@ const Crumb = styled.span`
 `;
 
 const FooterNote = styled.p`
-  position: absolute;
-  bottom: ${theme.spacing.lg};
-  left: ${theme.spacing.md};
+  margin-top: ${theme.spacing.lg};
 
   font-size: ${theme.fontSize.micro};
   color: ${theme.colors.inkMuted};
 
   ${media.tablet} {
+    position: absolute;
     left: ${theme.spacing.lg};
     bottom: ${theme.spacing.xl};
+    margin-top: 0;
   }
 `;
 
