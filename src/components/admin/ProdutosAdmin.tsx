@@ -105,6 +105,7 @@ interface FormularioProduto {
   estoquePorSabor: Record<string, string>;
   precoAdicionalPorSabor: Record<string, string>;
   ativo: boolean;
+  destaque: boolean;
 }
 
 function listaDeSabores(saboresTexto: string): string[] {
@@ -135,6 +136,7 @@ function produtoParaFormulario(produto: Produto): FormularioProduto {
     estoquePorSabor,
     precoAdicionalPorSabor,
     ativo: produto.ativo,
+    destaque: produto.destaque ?? false,
   };
 }
 
@@ -150,6 +152,7 @@ const FORMULARIO_VAZIO: FormularioProduto = {
   estoquePorSabor: {},
   precoAdicionalPorSabor: {},
   ativo: true,
+  destaque: false,
 };
 
 export function ProdutosAdmin() {
@@ -230,6 +233,7 @@ export function ProdutosAdmin() {
         formulario.controlaEstoque && temSabores ? estoquePorSabor : undefined,
       precoAdicionalPorSabor: temSabores ? precoAdicionalPorSabor : undefined,
       sabores,
+      destaque: formulario.destaque,
     };
 
     setSalvando(true);
@@ -294,6 +298,7 @@ export function ProdutosAdmin() {
                     !produto.sabores?.length &&
                     ` · estoque: ${produto.estoque ?? 0}`}
                   {!produto.ativo && " · fora da vitrine"}
+                  {produto.destaque && " · destaque"}
                 </DetalheProduto>
               </InfoProduto>
               <Acoes>
@@ -414,6 +419,19 @@ export function ProdutosAdmin() {
               ))}
             </Campo>
           )}
+
+          <Campo>
+            <LinhaCheckbox>
+              <input
+                type="checkbox"
+                checked={formulario.destaque}
+                onChange={(e) =>
+                  setFormulario({ ...formulario, destaque: e.target.checked })
+                }
+              />
+              Exibir nos destaques
+            </LinhaCheckbox>
+          </Campo>
 
           <Campo>
             <LinhaCheckbox>
