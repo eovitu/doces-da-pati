@@ -37,6 +37,29 @@ interface ItemGA4 {
   item_variant?: string;
 }
 
+export type ListaProdutos = "destaques" | "vitrine";
+export type OrigemWhatsapp =
+  | "cabecalho"
+  | "rodape"
+  | "encomendas"
+  | "consulta_produto"
+  | "pedido";
+
+const NOMES_LISTA: Record<ListaProdutos, string> = {
+  destaques: "Produtos em destaque",
+  vitrine: "Vitrine principal",
+};
+
+function produtoParaGA4(
+  produto: Pick<Produto, "slug" | "nome" | "preco">
+): ItemGA4 {
+  return {
+    item_id: produto.slug,
+    item_name: produto.nome,
+    price: paraReais(produto.preco),
+  };
+}
+
 function itemParaGA4(item: Pick<ItemCarrinho, "produtoSlug" | "nome" | "precoUnitario" | "sabor" | "quantidade">): ItemGA4 {
   return {
     item_id: item.produtoSlug,
@@ -67,11 +90,37 @@ export function atualizarConsentimento(concedido: boolean) {
   });
 }
 
-export function visualizarProduto(produto: Pick<Produto, "slug" | "nome" | "preco">) {
-  gtag("event", "view_item", {
-    currency: "BRL",
-    value: paraReais(produto.preco),
-    items: [{ item_id: produto.slug, item_name: produto.nome, price: paraReais(produto.preco) }],
+export function visualizarItemDaLista(
+  produto: Pick<Produto, "slug" | "nome" | "preco">,
+  lista: ListaProdutos
+) {
+  gtag("event", "view_item_list", {
+    item_list_id: lista,
+    item_list_name: NOMES_LISTA[lista],
+    items: [produtoParaGA4(produto)],
+  });
+}
+
+export function selecionarItem(
+  produto: Pick<Produto, "slug" | "nome" | "preco">,
+  lista: ListaProdutos
+) {
+  gtag("event", "select_item", {
+    item_list_id: lista,
+    item_list_name: NOMES_LISTA[lista],
+    items: [produtoParaGA4(produto)],
+  });
+}
+
+export function clicarWhatsapp(
+  origem: OrigemWhatsapp,
+  produto?: Pick<Produto, "slug" | "nome">
+) {
+  gtag("event", "click_whatsapp", {
+    link_origem: origem,
+    ...(produto
+      ? { item_id: produto.slug, item_name: produto.nome }
+      : {}),
   });
 }
 

@@ -7,6 +7,11 @@ import { precoComSabor, Produto, saborEsgotado } from "@/types/produto";
 
 import { useCarrinho } from "@/lib/carrinho";
 import { formatarPreco } from "@/lib/whatsapp";
+import {
+  clicarWhatsapp,
+  ListaProdutos,
+  selecionarItem,
+} from "@/lib/analytics";
 import { theme, media } from "@/styles/theme";
 
 const Bloco = styled.div`
@@ -117,10 +122,12 @@ export function AdicionarAoCarrinho({
   produto,
   disponivel,
   linkConsulta,
+  lista,
 }: {
   produto: Produto;
   disponivel: boolean;
   linkConsulta: string;
+  lista: ListaProdutos;
 }) {
   const { adicionar, itens } = useCarrinho();
   const temSabores = Boolean(produto.sabores && produto.sabores.length > 0);
@@ -143,7 +150,15 @@ export function AdicionarAoCarrinho({
   // inventado ao total seria pior do que mandar a pessoa perguntar.
   if (produto.preco === 0) {
     return (
-      <Consulta href={linkConsulta} target="_blank" rel="noopener noreferrer">
+      <Consulta
+        href={linkConsulta}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => {
+          selecionarItem(produto, lista);
+          clicarWhatsapp("consulta_produto", produto);
+        }}
+      >
         Consultar no WhatsApp
       </Consulta>
     );
@@ -157,6 +172,7 @@ export function AdicionarAoCarrinho({
 
   function onAdicionar() {
     if (faltaEscolherSabor) return;
+    selecionarItem(produto, lista);
     adicionar(produto, sabor);
     setConfirmado(true);
     const el = botaoRef.current;
