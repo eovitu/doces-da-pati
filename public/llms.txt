@@ -2,6 +2,8 @@
 
 Catálogo online de uma doceria de bairro na zona sul de São Paulo (Brasil).
 
+Site oficial: https://doces-da-pati.vercel.app/
+
 ## O que é
 
 Site de vitrine digital: mostra os produtos com foto e preço, o cliente
@@ -36,3 +38,14 @@ Pix ou cartão (maquininha).
 
 WhatsApp: +55 11 98609-2770
 Instagram: https://www.instagram.com/osdocesdapati
+
+## URLs públicas
+
+- Catálogo: https://doces-da-pati.vercel.app/
+- Política de privacidade: https://doces-da-pati.vercel.app/privacidade
+- Termos de uso: https://doces-da-pati.vercel.app/termos
+- Sitemap: https://doces-da-pati.vercel.app/sitemap.xml
+
+O site não possui páginas individuais para cada produto. Disponibilidade,
+entrega, pagamento e confirmação do pedido são combinados com a loja no
+WhatsApp; abrir a conversa não significa que a venda foi concluída.
