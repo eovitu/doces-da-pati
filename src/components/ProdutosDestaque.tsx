@@ -84,6 +84,7 @@ export function ProdutosDestaque({
                 produto={produto}
                 whatsapp={whatsapp}
                 sizes={SIZES}
+                lista="destaques"
                 prioridade={indice === 0}
               />
             </RevealCheia>
