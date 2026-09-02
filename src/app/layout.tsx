@@ -5,6 +5,11 @@ import { GlobalStyle } from "@/styles/GlobalStyle";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { ConsentBanner } from "@/components/ConsentBanner";
+import {
+  normalizeGoogleVerificationToken,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/site";
 import "./globals.css";
 
 // Display: serifada moderna, com personalidade — combina com doce artesanal.
@@ -26,10 +31,18 @@ const descricao =
   "Espetinhos de morango e uva, pão de mel, bombom no pote, lanche e suco natural. " +
   "Feitos na hora na zona sul de São Paulo, com retirada no Parque Regina e entrega nos bairros vizinhos. Pedidos pelo WhatsApp.";
 
+const googleSiteVerification = normalizeGoogleVerificationToken(
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+);
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://doces-da-pati.vercel.app"),
+  metadataBase: SITE_URL,
+  applicationName: SITE_NAME,
   title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
   description: descricao,
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/produtos/logo-doces-da-pati.png",
     apple: "/produtos/logo-doces-da-pati.png",
@@ -49,7 +62,7 @@ export const metadata: Metadata = {
     siteName: "Os Doces da Pati",
     title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
     description: descricao,
-    url: "https://doces-da-pati.vercel.app",
+    url: "/",
     images: [
       {
         url: "/og.jpg",
@@ -65,6 +78,9 @@ export const metadata: Metadata = {
     description: descricao,
     images: ["/og.jpg"],
   },
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
+    : {}),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

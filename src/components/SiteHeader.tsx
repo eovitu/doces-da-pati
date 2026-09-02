@@ -3,6 +3,7 @@
 import styled from "styled-components";
 import { LojaInfo } from "@/types/produto";
 import { linkContatoWhatsapp } from "@/lib/whatsapp";
+import { clicarWhatsapp } from "@/lib/analytics";
 import { theme, media } from "@/styles/theme";
 import { Reveal } from "./Reveal";
 
@@ -128,6 +129,7 @@ export function SiteHeader({ loja }: { loja: LojaInfo }) {
             href={linkContatoWhatsapp(loja.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => clicarWhatsapp("cabecalho")}
           >
             Falar no WhatsApp
           </Acao>

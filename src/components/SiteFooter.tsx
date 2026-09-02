@@ -4,6 +4,7 @@ import styled from "styled-components";
 import NextLink from "next/link";
 import { BairroEntrega, LojaInfo } from "@/types/produto";
 import { linkContatoWhatsapp } from "@/lib/whatsapp";
+import { clicarWhatsapp } from "@/lib/analytics";
 import { theme, media } from "@/styles/theme";
 import { reabrirPreferenciasCookies } from "./ConsentBanner";
 
@@ -140,6 +141,7 @@ export function SiteFooter({
               href={linkContatoWhatsapp(loja.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => clicarWhatsapp("rodape")}
             >
               WhatsApp
             </Link>

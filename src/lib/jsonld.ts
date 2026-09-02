@@ -1,4 +1,5 @@
 import { LojaInfo, Produto } from "@/types/produto";
+import { absoluteUrl } from "./site";
 
 /**
  * LocalBusiness/Bakery com só o que existe de verdade no modelo de dados —
@@ -15,7 +16,11 @@ export function jsonLdLoja(loja: LojaInfo, produtos: Produto[]): string {
   const json = {
     "@context": "https://schema.org",
     "@type": "Bakery",
+    "@id": absoluteUrl("/#business"),
     name: loja.nome,
+    url: absoluteUrl(),
+    logo: absoluteUrl("/produtos/logo-doces-da-pati.png"),
+    image: absoluteUrl("/og.jpg"),
     telephone: `+${loja.whatsapp}`,
     address: {
       "@type": "PostalAddress",

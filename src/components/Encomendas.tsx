@@ -3,6 +3,7 @@
 import styled from "styled-components";
 import { theme, media } from "@/styles/theme";
 import { Reveal } from "./Reveal";
+import { clicarWhatsapp } from "@/lib/analytics";
 
 // Encomendas de festinha são sob consulta: não têm preço e por isso não são
 // card de produto. Chamada à parte, levando direto para a conversa.
@@ -72,7 +73,12 @@ export function Encomendas({ href }: { href: string }) {
               pelo WhatsApp.
             </Texto>
           </div>
-          <Acao href={href} target="_blank" rel="noopener noreferrer">
+          <Acao
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => clicarWhatsapp("encomendas")}
+          >
             Pedir orçamento
           </Acao>
         </Inner>

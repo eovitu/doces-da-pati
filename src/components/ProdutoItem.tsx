@@ -5,7 +5,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import { Produto, produtoDisponivel } from "@/types/produto";
 import { formatarPreco, linkPedidoWhatsapp } from "@/lib/whatsapp";
-import { visualizarProduto } from "@/lib/analytics";
+import { ListaProdutos, visualizarItemDaLista } from "@/lib/analytics";
 import { AdicionarAoCarrinho } from "./AdicionarAoCarrinho";
 import { theme, media } from "@/styles/theme";
 
@@ -126,11 +126,13 @@ export function ProdutoItem({
   produto,
   whatsapp,
   sizes,
+  lista,
   prioridade = false,
 }: {
   produto: Produto;
   whatsapp: string;
   sizes: string;
+  lista: ListaProdutos;
   prioridade?: boolean;
 }) {
   const imagem = produto.imagens[0];
@@ -145,7 +147,7 @@ export function ProdutoItem({
     const observer = new IntersectionObserver(
       ([entrada]) => {
         if (entrada.isIntersecting) {
-          visualizarProduto(produto);
+          visualizarItemDaLista(produto, lista);
           observer.disconnect();
         }
       },
@@ -153,7 +155,7 @@ export function ProdutoItem({
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [produto]);
+  }, [lista, produto]);
 
   return (
     <Item ref={itemRef} $disponivel={disponivel}>
@@ -186,6 +188,7 @@ export function ProdutoItem({
           produto={produto}
           disponivel={disponivel}
           linkConsulta={linkPedidoWhatsapp(whatsapp, produto)}
+          lista={lista}
         />
       </Texto>
     </Item>

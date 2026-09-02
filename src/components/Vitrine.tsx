@@ -87,6 +87,7 @@ export function Vitrine({ produtos, whatsapp }: { produtos: Produto[]; whatsapp:
                 produto={produto}
                 whatsapp={whatsapp}
                 sizes={SIZES}
+                lista="vitrine"
                 prioridade={i === 0}
               />
             </RevealCheia>
