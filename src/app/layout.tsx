@@ -28,9 +28,8 @@ const karla = Karla({
 });
 
 const descricao =
-  "Doces artesanais feitos na hora com ingredientes selecionados na Zona Sul de SP. " +
-  "Espetinhos de morango e uva, pão de mel, bombom no pote, lanches e suco natural. " +
-  "Retirada no Parque Regina e entrega nos bairros vizinhos. Peça já pelo WhatsApp!";
+  "Espetinhos de morango e uva, pão de mel, bombom no pote, lanche e suco natural. " +
+  "Feitos na hora na zona sul de São Paulo, com retirada no Parque Regina e entrega nos bairros vizinhos. Pedidos pelo WhatsApp.";
 
 const googleSiteVerification = normalizeGoogleVerificationToken(
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
@@ -38,19 +37,17 @@ const googleSiteVerification = normalizeGoogleVerificationToken(
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
-  applicationName: "Os Doces da Pati",
-  title: "Os Doces da Pati — Confeitaria Artesanal na Zona Sul de SP",
+  applicationName: SITE_NAME,
+  title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
   description: descricao,
   alternates: {
     canonical: "/",
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/produtos/logo-doces-da-pati.png",
+    apple: "/produtos/logo-doces-da-pati.png",
   },
   keywords: [
-    "Os Doces da Pati",
     "doces artesanais",
     "espetinho de morango",
     "pão de mel",
@@ -58,13 +55,12 @@ export const metadata: Metadata = {
     "zona sul São Paulo",
     "Parque Regina",
     "Campo Limpo",
-    "confeitaria artesanal",
   ],
   openGraph: {
     type: "website",
     locale: "pt_BR",
     siteName: "Os Doces da Pati",
-    title: "Os Doces da Pati — Confeitaria Artesanal na Zona Sul de SP",
+    title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
     description: descricao,
     url: "/",
     images: [
@@ -78,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Os Doces da Pati — Confeitaria Artesanal na Zona Sul de SP",
+    title: "Os Doces da Pati — Doces artesanais na zona sul de SP",
     description: descricao,
     images: ["/og.jpg"],
   },
@@ -87,28 +83,9 @@ export const metadata: Metadata = {
     : {}),
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Os Doces da Pati",
-    "alternateName": ["Doces da Pati", "Doces Pati"],
-    "url": "https://doces-da-pati.vercel.app/",
-    "image": "https://doces-da-pati.vercel.app/favicon.png",
-  };
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${fraunces.variable} ${karla.variable}`}>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
       <body>
         <StyledComponentsRegistry>
           <GlobalStyle />
