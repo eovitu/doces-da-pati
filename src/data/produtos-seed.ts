@@ -96,6 +96,16 @@ export const produtosSeed: Produto[] = [
     ordem: 8,
     controlaEstoque: false,
   },
+  {
+    slug: "bombom-de-morango",
+    nome: "Bombom de Morango",
+    descricao: "Morango recheado com brigadeiro de ninho e cobertura de chocolate ao leite.",
+    preco: 1500,
+    imagens: [{ url: "/produtos/bombom-de-morango.webp" }],
+    ativo: true,
+    ordem: 9,
+    controlaEstoque: false,
+  },
 ];
 
 export const lojaInfoSeed: LojaInfo = {
