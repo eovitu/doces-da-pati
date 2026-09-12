@@ -19,6 +19,7 @@ Preços em centavos, conforme a convenção da especificação.
 | 7 | Lanche natural | `lanche-natural` | 1200 | Salgados |
 | 8 | Suco natural 250ml | `suco-natural` | 700 | Bebidas |
 | 9 | Morango cravejado | `morango-cravejado` | 1500 | Espetinhos |
+| 10 | Bombom de Morango | `bombom-de-morango` | 1500 | Doces |
 
 ## Descrições
 
@@ -46,6 +47,9 @@ cenoura, tomate e alface.
 **Morango cravejado** — Morango recheado com chocolate branco e cravejado com
 pedaços de morango liofilizado. Adicionado depois do catálogo original, a
 pedido do Victor.
+
+**Bombom de Morango** — Morango recheado com brigadeiro de ninho e cobertura
+de chocolate ao leite.
 
 ## Sabores (campo `sabores`)
 
