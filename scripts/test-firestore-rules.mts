@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { assertSucceeds, initializeTestEnvironment } from "@firebase/rules-unit-testing";
+import type { DocumentData } from "firebase/firestore";
 
 const PROJECT_ID = "demo-pati-rules";
 const testEnv = await initializeTestEnvironment({
@@ -90,7 +91,7 @@ async function verificar(
 
 async function criarPedido(
   db: typeof anonimo,
-  pedido: unknown,
+  pedido: DocumentData,
   esperado: "permitir" | "negar",
   nome: string,
 ) {
