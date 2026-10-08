@@ -3,18 +3,64 @@ rules_version = '2';
 // Regras de segurança do Firestore — modelo completo em docs/ESPECIFICACAO.md.
 //
 // - produtos, categorias, loja/info, entrega/config: leitura pública (é uma
-//   vitrine), escrita só de quem tem um documento em admins/{uid} — ou seja,
-//   só a Patricia autenticada, nunca qualquer usuário logado.
-// - pedidos: qualquer cliente (mesmo anônimo) pode CRIAR um pedido bem
-//   formado; ler, alterar ou apagar exige ser admin. Nada além de criar é
-//   liberado ao cliente.
-// - admins: leitura só do próprio documento (um admin confirma que é admin),
-//   escrita nunca pelo cliente — só pelo console/CLI ao criar um usuário novo.
+//   vitrine), escrita só de quem tem um documento em admins/{uid}.
+// - pedidos: qualquer cliente (mesmo anônimo) pode criar um pedido com campos
+//   de topo válidos; itens ainda não são inspecionados pelas regras. Leitura,
+//   alteração e exclusão exigem ser admin.
+// - admins: leitura só do próprio documento; escrita nunca pelo cliente.
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
       return request.auth != null &&
         exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function textoCurtoValido(valor) {
+      return valor is string && valor.size() > 0 && valor.size() <= 1000;
+    }
+
+    function itensContagemValida(itens) {
+      return itens is list && itens.size() > 0;
+    }
+
+    function clienteValido(cliente) {
+      return cliente is map &&
+        cliente.keys().hasAll(["nome", "telefone"]) &&
+        cliente.keys().hasOnly(["nome", "telefone"]) &&
+        textoCurtoValido(cliente.nome) && textoCurtoValido(cliente.telefone);
+    }
+
+    function entregaValida(entrega, taxa) {
+      return entrega is map &&
+        entrega.keys().hasAll(["tipo", "bairro", "endereco"]) &&
+        entrega.keys().hasOnly(["tipo", "bairro", "endereco"]) &&
+        (entrega.tipo == "retirada"
+          ? entrega.bairro == null && entrega.endereco == null && taxa == 0
+          : entrega.tipo == "entrega" &&
+            textoCurtoValido(entrega.bairro) &&
+            textoCurtoValido(entrega.endereco));
+    }
+
+    function pedidoValido() {
+      let dados = request.resource.data;
+      return dados.keys().hasAll([
+          "itens", "subtotal", "taxaEntrega", "total", "cliente", "entrega",
+          "formaPagamento", "observacoes", "status", "criadoEm"
+        ]) &&
+        dados.keys().hasOnly([
+          "itens", "subtotal", "taxaEntrega", "total", "cliente", "entrega",
+          "formaPagamento", "observacoes", "status", "criadoEm"
+        ]) &&
+        itensContagemValida(dados.itens) &&
+        dados.subtotal is int && dados.subtotal >= 0 &&
+        dados.taxaEntrega is int && dados.taxaEntrega >= 0 &&
+        dados.total is int && dados.total >= 0 &&
+        dados.total == dados.subtotal + dados.taxaEntrega &&
+        clienteValido(dados.cliente) &&
+        entregaValida(dados.entrega, dados.taxaEntrega) &&
+        dados.formaPagamento in ["pix", "dinheiro", "cartao"] &&
+        dados.observacoes is string && dados.observacoes.size() <= 5000 &&
+        dados.status == "novo" && dados.criadoEm is timestamp;
     }
 
     match /produtos/{produtoId} {
@@ -44,28 +90,7 @@ service cloud.firestore {
 
     match /pedidos/{pedidoId} {
       allow read, update, delete: if isAdmin();
-      allow create: if isAdmin() || (
-        request.resource.data.keys().hasOnly([
-          "itens", "subtotal", "taxaEntrega", "total", "cliente", "entrega",
-          "formaPagamento", "observacoes", "status", "criadoEm"
-        ]) &&
-        request.resource.data.itens is list &&
-        request.resource.data.itens.size() > 0 &&
-        request.resource.data.cliente.keys().hasOnly(["nome", "telefone"]) &&
-        request.resource.data.cliente.nome is string &&
-        request.resource.data.cliente.nome.size() > 0 &&
-        request.resource.data.cliente.telefone is string &&
-        request.resource.data.cliente.telefone.size() > 0 &&
-        request.resource.data.entrega.tipo in ["retirada", "entrega"] &&
-        request.resource.data.formaPagamento in ["pix", "dinheiro", "cartao"] &&
-        request.resource.data.subtotal is number &&
-        request.resource.data.subtotal >= 0 &&
-        request.resource.data.taxaEntrega is number &&
-        request.resource.data.taxaEntrega >= 0 &&
-        request.resource.data.total is number &&
-        request.resource.data.total >= 0 &&
-        request.resource.data.status == "novo"
-      );
+      allow create: if isAdmin() || pedidoValido();
     }
   }
 }
