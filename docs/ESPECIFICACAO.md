@@ -221,6 +221,19 @@ alguma query, criar sob demanda pelo link que ele mesmo fornece no erro.
                                           nunca pelo cliente (só pelo console)
 ```
 
+**Estado da implementação em 07/10/2026:** as regras atualmente validam os
+campos de topo do pedido, valores monetários inteiros em centavos, timestamp e
+`total == subtotal + taxaEntrega`. Elas ainda **não** validam o schema nem os
+preços dos itens e **não** conferem se o subtotal corresponde à soma deles.
+Firebase App Check e seu enforcement também não foram implementados nem
+verificados; ainda há possibilidade de abuso de escrita. Os requisitos abaixo
+descrevem o contrato desejado e não devem ser lidos como controles já ativos.
+
+Quando a persistência de pedidos for implementada no frontend, será necessária
+uma solução confiável para validar itens e valores, junto de uma política
+coerente para preço, subtotal e entrega. A regra parcial atual não comprova
+essas propriedades.
+
 **Atenção ao `create` público em `pedidos`.** É necessário (o cliente não está
 autenticado), mas uma regra permissiva demais deixa qualquer um escrever
 documentos arbitrários no banco. Mitigações obrigatórias:
