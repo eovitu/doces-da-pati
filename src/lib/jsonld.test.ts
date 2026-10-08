@@ -11,7 +11,7 @@ test("publica a confeitaria com identidade e URLs canônicas", () => {
   assert.equal(json["@id"], absoluteUrl("/#business"));
   assert.equal(json.url, absoluteUrl());
   assert.equal(json.logo, absoluteUrl("/produtos/logo-doces-da-pati.png"));
-  assert.equal(json.image, absoluteUrl("/og.jpg"));
+  assert.equal(json.image, absoluteUrl("/compartilhamento-pati-v2.jpg"));
 });
 
 test("não inventa localização ou horário estruturado", () => {
