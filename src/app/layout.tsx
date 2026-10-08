@@ -6,7 +6,10 @@ import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { ConsentBanner } from "@/components/ConsentBanner";
 import {
+  absoluteUrl,
   normalizeGoogleVerificationToken,
+  SHARE_IMAGE_ALT,
+  SHARE_IMAGE_PATH,
   SITE_NAME,
   SITE_URL,
 } from "@/lib/site";
@@ -38,7 +41,7 @@ const googleSiteVerification = normalizeGoogleVerificationToken(
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
-  applicationName: "Os Doces da Pati",
+  applicationName: SITE_NAME,
   title: "Os Doces da Pati — Confeitaria Artesanal na Zona Sul de SP",
   description: descricao,
   alternates: {
@@ -63,16 +66,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    siteName: "Os Doces da Pati",
+    siteName: SITE_NAME,
     title: "Os Doces da Pati — Confeitaria Artesanal na Zona Sul de SP",
     description: descricao,
     url: "/",
     images: [
       {
-        url: "/og.jpg",
+        url: SHARE_IMAGE_PATH,
         width: 1200,
         height: 630,
-        alt: "Bombom de morango no pote da Os Doces da Pati",
+        alt: SHARE_IMAGE_ALT,
       },
     ],
   },
@@ -80,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Os Doces da Pati — Confeitaria Artesanal na Zona Sul de SP",
     description: descricao,
-    images: ["/og.jpg"],
+    images: [{ url: SHARE_IMAGE_PATH, alt: SHARE_IMAGE_ALT }],
   },
   ...(googleSiteVerification
     ? { verification: { google: googleSiteVerification } }
@@ -98,7 +101,7 @@ export default function RootLayout({
     "name": "Os Doces da Pati",
     "alternateName": ["Doces da Pati", "Doces Pati"],
     "url": "https://doces-da-pati.vercel.app/",
-    "image": "https://doces-da-pati.vercel.app/favicon.png",
+    "image": absoluteUrl(SHARE_IMAGE_PATH),
   };
 
   return (

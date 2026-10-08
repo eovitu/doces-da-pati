@@ -1,5 +1,5 @@
 import { LojaInfo, Produto } from "@/types/produto";
-import { absoluteUrl } from "./site";
+import { absoluteUrl, SHARE_IMAGE_PATH } from "./site";
 
 /**
  * LocalBusiness/Bakery com só o que existe de verdade no modelo de dados —
@@ -20,7 +20,7 @@ export function jsonLdLoja(loja: LojaInfo, produtos: Produto[]): string {
     name: loja.nome,
     url: absoluteUrl(),
     logo: absoluteUrl("/produtos/logo-doces-da-pati.png"),
-    image: absoluteUrl("/og.jpg"),
+    image: absoluteUrl(SHARE_IMAGE_PATH),
     telephone: `+${loja.whatsapp}`,
     address: {
       "@type": "PostalAddress",
