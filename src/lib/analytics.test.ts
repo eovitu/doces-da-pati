@@ -14,13 +14,46 @@ function capturarGtag() {
     configurable: true,
     value: {
       gtag: (...args: unknown[]) => chamadas.push(args),
+      location: { href: "https://doces-da-pati.vercel.app/" },
     },
+  });
+  Object.defineProperty(globalThis, "document", {
+    configurable: true,
+    value: { title: "Os Doces da Pati" },
   });
   return chamadas;
 }
 
 test.afterEach(() => {
   Reflect.deleteProperty(globalThis, "window");
+  Reflect.deleteProperty(globalThis, "document");
+});
+
+test("envia page view quando a pessoa aceita Analytics", () => {
+  const chamadas = capturarGtag();
+
+  analytics.atualizarConsentimento(true);
+
+  assert.deepEqual(chamadas, [
+    [
+      "consent",
+      "update",
+      {
+        analytics_storage: "granted",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+      },
+    ],
+    [
+      "event",
+      "page_view",
+      {
+        page_location: "https://doces-da-pati.vercel.app/",
+        page_title: "Os Doces da Pati",
+      },
+    ],
+  ]);
 });
 
 test("registra impressão como item de uma vitrine", () => {

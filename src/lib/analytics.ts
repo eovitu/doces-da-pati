@@ -88,6 +88,16 @@ export function atualizarConsentimento(concedido: boolean) {
     ad_user_data: "denied",
     ad_personalization: "denied",
   });
+
+  // A primeira configuração ocorreu com Analytics negado. Ao aceitar no
+  // banner, enviamos explicitamente a visualização da página atual para que
+  // a primeira visita consentida não fique sem medição.
+  if (concedido && typeof window !== "undefined") {
+    gtag("event", "page_view", {
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }
 }
 
 export function visualizarItemDaLista(

@@ -1,9 +1,35 @@
 import type { Metadata } from "next";
 import { PaginaLegal } from "@/components/PaginaLegal";
+import { SHARE_IMAGE_ALT, SHARE_IMAGE_PATH } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade — Os Doces da Pati",
   description: "Como o site da Os Doces da Pati trata os dados de quem faz um pedido.",
+  alternates: {
+    canonical: "/privacidade",
+  },
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "Os Doces da Pati",
+    title: "Política de Privacidade — Os Doces da Pati",
+    description: "Como o site da Os Doces da Pati trata os dados de quem faz um pedido.",
+    url: "/privacidade",
+    images: [
+      {
+        url: SHARE_IMAGE_PATH,
+        width: 1200,
+        height: 630,
+        alt: SHARE_IMAGE_ALT,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Política de Privacidade — Os Doces da Pati",
+    description: "Como o site da Os Doces da Pati trata os dados de quem faz um pedido.",
+    images: [{ url: SHARE_IMAGE_PATH, alt: SHARE_IMAGE_ALT }],
+  },
 };
 
 // NOTA: este texto foi escrito para ser honesto e compreensível, mas não
