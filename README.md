@@ -42,6 +42,33 @@ npm run build                # build de produção
 npm run lint                 # lint
 ```
 
+## Verificação antes de integrar
+
+Use Node.js 24 e instale exatamente as dependências do lockfile com `npm ci`.
+Os comandos abaixo rodam os testes unitários, lint, build e verificação de
+tipos nessa ordem; o typecheck vem depois do build porque o Next.js gera tipos
+em `.next/types` durante a compilação.
+
+```bash
+npm test
+npm run lint
+npm run build
+npm run typecheck
+# ou o conjunto acima em um único comando:
+npm run verify
+```
+
+Os testes das Firestore Rules exigem Java 21 e usam o emulador local, iniciado
+com o project ID reservado `demo-pati-rules`:
+
+```bash
+npm run test:rules
+```
+
+Esse comando não publica Rules nem conecta ao banco real. Não rode scripts de
+seed durante a verificação: eles escrevem documentos no Firestore configurado
+e não fazem parte desses testes.
+
 O comportamento é controlado por `NEXT_PUBLIC_USA_FIREBASE` no `.env.local`:
 
 - `false` (padrão) — usa os produtos reais de `src/data/produtos-seed.ts`
