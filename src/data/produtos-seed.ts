@@ -18,7 +18,7 @@ export const produtosSeed: Produto[] = [
     slug: "espetinho-de-bombom-de-morango",
     nome: "Espetinho de bombom de morango",
     descricao: "Morango recheado com brigadeiro de ninho e cobertura de chocolate.",
-    preco: 1800,
+    preco: 2000,
     imagens: [{ url: "/produtos/espetinho-de-bombom-de-morango.webp" }],
     ativo: true,
     ordem: 1,
