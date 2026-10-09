@@ -58,6 +58,8 @@ npm run typecheck
 npm run verify
 ```
 
+Para confirmar a CI no commit publicado, compare o SHA de uma execução concluída com sucesso com o SHA do deploy de produção na Vercel.
+
 Os testes das Firestore Rules exigem Java 21 e usam o emulador local, iniciado
 com o project ID reservado `demo-pati-rules`:
 
