@@ -11,7 +11,7 @@ Preços em centavos, conforme a convenção da especificação.
 | # | Produto | Slug | Preço | Categoria sugerida |
 |---|---|---|---|---|
 | 1 | Espetinho de morango | `espetinho-de-morango` | 1500 | Espetinhos |
-| 2 | Espetinho de bombom de morango | `espetinho-de-bombom-de-morango` | 1800 | Espetinhos |
+| 2 | Espetinho de bombom de morango | `espetinho-de-bombom-de-morango` | 2000 | Espetinhos |
 | 3 | Espetinho de uva | `espetinho-de-uva` | 1200 | Espetinhos |
 | 4 | Pão de mel | `pao-de-mel` | 1000 | Doces |
 | 5 | Bombom de morango no pote | `bombom-de-morango-no-pote` | 1800 | Potes |
